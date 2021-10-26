@@ -17,7 +17,7 @@ void matrixMultiplicationKernel(const int* d_matrixA,
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
 
-    if ((row * col) < N) {
+    if ((row * col) < N*N) {
         int temp = 0;
         for (int i = 0; i < BLOCK_SIZE_X; i++) {
             temp += d_matrixA[row*BLOCK_SIZE_X + i] + d_matrixB[col+i*BLOCK_SIZE_Y];
