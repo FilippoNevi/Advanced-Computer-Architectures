@@ -10,7 +10,12 @@ __global__
 void matrixTransposeKernel(const int* d_matrix_in,
                            int        N,
                            int*       d_matrix_out) {
-    /// YOUR CODE
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if((row * col) < N*N) {
+        d_matrix_out[col*BLOCK_SIZE_X + row] = d_matrix_in[row*BLOCK_SIZE_X + col];
+    }
 }
 
 const int N  = 1000;
@@ -48,18 +53,18 @@ int main() {
     // -------------------------------------------------------------------------
     // DEVICE MEMORY ALLOCATION
     int *d_matrix_in, *d_matrix_out;
-    /// SAFE_CALL( cudaMalloc( ... ) )
-    /// SAFE_CALL( cudaMalloc( ... ) )
+    SAFE_CALL( cudaMalloc( &d_matrix_in, N*N*sizeof(int) ) );
+    SAFE_CALL( cudaMalloc( &d_matrix_out, N*N*sizeof(int) ) );
 
     // -------------------------------------------------------------------------
     // COPY DATA FROM HOST TO DEVIE
-    /// SAFE_CALL( cudaMemcpy( ... ) )
+    SAFE_CALL( cudaMemcpy( d_matrix_in, h_matrix_in, N*N*sizeof(int), cudaMemcpyHostToDevice ));
 
     // -------------------------------------------------------------------------
     // DEVICE EXECUTION
     TM_device.start();
 
-    /// matrixTransposeKernel<<< , >>>();
+    matrixTransposeKernel<<< , >>>();
 
     TM_device.stop();
     CHECK_CUDA_ERROR
