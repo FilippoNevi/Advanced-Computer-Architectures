@@ -17,11 +17,14 @@ void matrixMultiplicationKernel(const int* d_matrixA,
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
 
-    int temp = 0;
-    for (int i = 0; i < BLOCK_SIZE_X; i++) {
-	temp += d_matrixA[row*BLOCK_SIZE_X + i] + d_matrixB[col+i*BLOCK_SIZE_Y];
+    if ((row * col) < N) {
+        int temp = 0;
+        for (int i = 0; i < BLOCK_SIZE_X; i++) {
+            temp += d_matrixA[row*BLOCK_SIZE_X + i] + d_matrixB[col+i*BLOCK_SIZE_Y];
+        }
+
+        d_matrixC[row*BLOCK_SIZE_X + col] = temp;
     }
-    d_matrixC[row*BLOCK_SIZE_X + col] = temp;
 }
 
 const int N = 128;
@@ -65,14 +68,14 @@ int main() {
     // -------------------------------------------------------------------------
     // DEVICE MEMORY ALLOCATION
     int *d_matrixA, *d_matrixB, *d_matrixC;
-    SAFE_CALL( cudaMalloc( &d_matrixA, N*sizeof(int) ));
-    SAFE_CALL( cudaMalloc( &d_matrixB, N*sizeof(int) ));
-    SAFE_CALL( cudaMalloc( &d_matrixC, N*sizeof(int) ));
+    SAFE_CALL( cudaMalloc( &d_matrixA, N*N*sizeof(int) ));
+    SAFE_CALL( cudaMalloc( &d_matrixB, N*N*sizeof(int) ));
+    SAFE_CALL( cudaMalloc( &d_matrixC, N*N*sizeof(int) ));
 
     // -------------------------------------------------------------------------
     // COPY DATA FROM HOST TO DEVIE
-    SAFE_CALL( cudaMemcpy( d_matrixA, h_matrixA, N*sizeof(int), cudaMemcpyHostToDevice ));
-    SAFE_CALL( cudaMemcpy( d_matrixB, h_matrixB, N*sizeof(int), cudaMemcpyHostToDevice ));
+    SAFE_CALL( cudaMemcpy( d_matrixA, h_matrixA, N*N*sizeof(int), cudaMemcpyHostToDevice ));
+    SAFE_CALL( cudaMemcpy( d_matrixB, h_matrixB, N*N*sizeof(int), cudaMemcpyHostToDevice ));
 
     // -------------------------------------------------------------------------
     // DEVICE EXECUTION
@@ -92,7 +95,7 @@ int main() {
 
     // -------------------------------------------------------------------------
     // COPY DATA FROM DEVICE TO HOST
-    SAFE_CALL( cudaMemcpy( h_matrix_tmp, d_matrixC, N*sizeof(int), cudaMemcpyDeviceToHost ));
+    SAFE_CALL( cudaMemcpy( h_matrix_tmp, d_matrixC, N*N*sizeof(int), cudaMemcpyDeviceToHost ));
 
     // -------------------------------------------------------------------------
     // RESULT CHECK
