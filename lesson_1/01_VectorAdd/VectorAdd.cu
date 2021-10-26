@@ -19,22 +19,22 @@ void vectorAddKernel(const int* d_inputA,
 const int N = 100000000;
 
 int main(){
-    Timer<DEVICE> TM_device;
-    Timer<HOST>   TM_host;
+    Timer<DEVICE> TM_device;	// Timer per la GPU
+    Timer<HOST>   TM_host;	// Timer per la CPU
     // -------------------------------------------------------------------------
     // HOST MEMORY ALLOCATION
-    int* h_inputA     = new int[N];
+    int* h_inputA     = new int[N]; // Vettori di input salvati sull'host, sulla CPU
     int* h_inputB     = new int[N];
     int* d_output_tmp = new int[N]; // <-- used for device result
-    int* h_output     = new int[N];
+    int* h_output     = new int[N]; // Vettore di output della GPU
 
     // -------------------------------------------------------------------------
     // HOST INITILIZATION
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Creazione di numeri random usando una certa distribuzione
     std::default_random_engine generator(seed);
     std::uniform_int_distribution<int> distribution(1, 100);
 
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++) { // Attualmente la N è impostata a 100mln
         h_inputA[i] = distribution(generator);
         h_inputB[i] = distribution(generator);
     }
@@ -53,7 +53,7 @@ int main(){
     // -------------------------------------------------------------------------
     // DEVICE MEMORY ALLOCATION
     int *d_inputA, *d_inputB, *d_output;
-    SAFE_CALL( cudaMalloc( &d_inputA, N * sizeof(int) ));
+    SAFE_CALL( cudaMalloc( &d_inputA, N * sizeof(int) ));	// Queste safe call rilevano errori ed eccezioni per poi salvarle in strutture dedicate e gestirle
     SAFE_CALL( cudaMalloc( &d_inputB, N * sizeof(int) ));
     SAFE_CALL( cudaMalloc( &d_output, N * sizeof(int) ));
 
@@ -65,22 +65,22 @@ int main(){
     // -------------------------------------------------------------------------
     // DEVICE INIT
     dim3 DimGrid(N/256, 1, 1);
-    if (N%256) DimGrid.x++;
+    if (N%256) DimGrid.x++;	// 256 blocchi, ma se N non è perfettamente divisibile per 256 allora creiamo un blocco in più
     dim3 DimBlock(256, 1, 1);
               
     // -------------------------------------------------------------------------
     // DEVICE EXECUTION
     std::cout<<"Starting computation on DEVICE.."<<std::endl;
-    TM_device.start();
+    TM_device.start();	// Parte il cronometro per misurare il tempo
 
     vectorAddKernel<<<DimGrid,DimBlock>>>(d_inputA,d_inputB,N,d_output);
 
-    TM_device.stop();
     CHECK_CUDA_ERROR
+    TM_device.stop();
     TM_device.print("vectorAdd device: ");
 
     std::cout << std::setprecision(1)
-              << "Speedup: " << TM_host.duration() / TM_device.duration()
+              << "Speedup: " << TM_host.duration() / TM_device.duration() // Calcola e stampa lo SPEEDUP
               << "x\n\n";
 
     // -------------------------------------------------------------------------
@@ -92,8 +92,8 @@ int main(){
     for (int i = 0; i < N; i++) {
         if (h_output[i] != d_output_tmp[i]) {
             std::cerr << "wrong result at: " << i
-                      << "\nhost:   " << h_output[i]
-                      << "\ndevice: " << d_output_tmp[i] << "\n\n";
+                      << "\nhost:   " << h_output[i]				// CONTROLLO DI CORRETTEZZA DEI RISULTATI
+                      << "\ndevice: " << d_output_tmp[i] << "\n\n";		// SEMPE DA FARE
             cudaDeviceReset();
             std::exit(EXIT_FAILURE);
         }
