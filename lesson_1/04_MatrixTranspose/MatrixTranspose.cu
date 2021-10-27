@@ -76,7 +76,7 @@ int main() {
 
     // -------------------------------------------------------------------------
     // COPY DATA FROM DEVICE TO HOST
-    /// SAFE_CALL( cudaMemcpy( ... ) )
+    SAFE_CALL( cudaMemcpy( h_matrix_tmp, d_matrix_out, N*N*sizeof(int), cudaMemcpyDeviceToHost ));
 
     // -------------------------------------------------------------------------
     // RESULT CHECK
@@ -100,8 +100,8 @@ int main() {
 
     // -------------------------------------------------------------------------
     // DEVICE MEMORY DEALLOCATION
-    /// SAFE_CALL( cudaFree( ... ) )
-    /// SAFE_CALL( cudaFree( ... ) )
+    SAFE_CALL( cudaFree( d_matrix_in ));
+    SAFE_CALL( cudaFree( d_matrix_out ));
 
     // -------------------------------------------------------------------------
     cudaDeviceReset();
