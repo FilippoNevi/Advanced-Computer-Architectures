@@ -26,20 +26,18 @@ void matrixMultiplicationKernel(const int* d_matrixA,
     int row = by * BLOCK_SIZE_Y + ty;
     int col = bx * BLOCK_SIZE_X + tx;
 
-    if ((row * col) < N*N) {
-        int temp = 0;
+    int temp = 0;
 
-        for (int m = 0; m < N/BLOCK_SIZE_X; ++m) {
-            // Collaborative loading of d_matrixA and d_matrixB tiles into shared memory
-            ds_matrixA[ty][tx] = d_matrixA[row*N + m*BLOCK_SIZE_X+tx];
-            ds_matrixB[ty][tx] = d_matrixB[col+(m*BLOCK_SIZE_Y+ty)*N];
-            __synchthreads();
-            for (int k = 0; k < BLOCK_SIZE_X; ++k)
-                temp += ds_matrixA[ty][k] * ds_matrixB[k][tx];
-            __synchthreads();
-        }
-        d_matrixC[row*N + col] = temp;
+    for (int m = 0; m < N/BLOCK_SIZE_X; ++m) {
+        // Collaborative loading of d_matrixA and d_matrixB tiles into shared memory
+        ds_matrixA[ty][tx] = d_matrixA[row*N + m*BLOCK_SIZE_X+tx];
+        ds_matrixB[ty][tx] = d_matrixB[col+(m*BLOCK_SIZE_Y+ty)*N];
+        __synchthreads();
+        for (int k = 0; k < BLOCK_SIZE_X; ++k)
+            temp += ds_matrixA[ty][k] * ds_matrixB[k][tx];
+        __synchthreads();
     }
+    d_matrixC[row*N + col] = temp;
 }
 
 const int N = 128;
@@ -96,8 +94,8 @@ int main() {
     // DEVICE EXECUTION
     TM_device.start();
 
-    dim3 block_size(16);
-    dim3 num_blocks(16);
+    dim3 num_blocks(N/BLOCK_SIZE_X, N_BLOCK_SIZE_Y, 1);
+    dim3 block_size(BLOCK_SIZE_X, BLOCK_SIZE_Y, 1);
     matrixMultiplicationKernel<<< num_blocks, block_size >>>(d_matrixA, d_matrixB, N, d_matrixC);
 
     CHECK_CUDA_ERROR
