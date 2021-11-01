@@ -18,14 +18,14 @@ void matrixMultiplicationKernel(const int* d_matrixA,
     int col = blockIdx.x * blockDim.x + threadIdx.x;
 
     int temp = 0;
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < N; ++i) {
         temp += d_matrixA[row*N + i] * d_matrixB[col+i*N];
     }
 
     d_matrixC[row*N + col] = temp;
 }
 
-const int N = 128;
+const int N = 1024;
 
 int main() {
     Timer<DEVICE> TM_device;
@@ -80,6 +80,8 @@ int main() {
     TM_device.start();
 
     dim3 num_blocks(N/BLOCK_SIZE_X, N/BLOCK_SIZE_Y, 1);
+    if (N % BLOCK_SIZE_X) num_blocks.x++;
+    if (N % BLOCK_SIZE_Y) num_blocks.y++;
     dim3 block_size(BLOCK_SIZE_X, BLOCK_SIZE_Y, 1);
     matrixMultiplicationKernel<<< num_blocks, block_size >>>(d_matrixA, d_matrixB, N, d_matrixC);
 

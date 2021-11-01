@@ -13,12 +13,12 @@ void matrixTransposeKernel(const int* d_matrix_in,
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
 
-    if((row * col) < N*N) {
-        d_matrix_out[col*BLOCK_SIZE_X + row] = d_matrix_in[row*BLOCK_SIZE_X + col];
-    }
+    d_matrix_out[row*N + col] = d_matrix_in[col*N + row];
 }
 
-const int N  = 1000;
+const int N  = 1024;
+const int BLOCK_SIZE_X = 16;
+const int BLOCK_SIZE_Y = 16;
 
 int main() {
     Timer<DEVICE> TM_device;
@@ -64,10 +64,13 @@ int main() {
     // DEVICE EXECUTION
     TM_device.start();
 
-    matrixTransposeKernel<<< , >>>();
+    dim3 num_blocks(N/BLOCK_SIZE_X, N/BLOCKS_SIZE_Y, 1);
+    dim3 block_size(BLOCK_SIZE_X, BLOCK_SIZE_Y, 1);
+    matrixTransposeKernel<<< num_blocks, block_size >>>(d_matrix_in, N, d_matrix_out);
 
-    TM_device.stop();
     CHECK_CUDA_ERROR
+    TM_device.stop();
+    
     TM_device.print("MatrixTranspose device: ");
 
     std::cout << std::setprecision(1)
