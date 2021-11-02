@@ -23,6 +23,7 @@ void stencilKernel(const int* d_input, int N,int* d_output) {
             for (int j = global_id-RADIUS; j <= global_id + RADIUS; ++j)
                 temp += ds_input[j];
             __syncthreads();
+        }
         d_output[global_id] = temp;
     }
 }
