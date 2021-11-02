@@ -64,7 +64,7 @@ int main() {
     // DEVICE EXECUTION
     TM_device.start();
 
-    dim3 num_blocks(N/BLOCK_SIZE_X, N/BLOCKS_SIZE_Y, 1);
+    dim3 num_blocks(N/BLOCK_SIZE_X, N/BLOCK_SIZE_Y, 1);
     dim3 block_size(BLOCK_SIZE_X, BLOCK_SIZE_Y, 1);
     matrixTransposeKernel<<< num_blocks, block_size >>>(d_matrix_in, N, d_matrix_out);
 
