@@ -17,7 +17,7 @@ void stencilKernel(const int* d_input, int N,int* d_output) {
     int global_id = blockIdx.x * blockDim.x + threadIdx.x;
     
     /**
-        Each thread loads in memory the corresponding item that has index = [global_thread_index + RADIUS]
+      Each thread loads in memory the corresponding item that has index = [global_thread_index + RADIUS]
       */
     // ds_input[threadIdx.x + RADIUS] = global_id < N ? d_input[global_id + RADIUS] : 0;
     if(global_id < N)
@@ -27,14 +27,23 @@ void stencilKernel(const int* d_input, int N,int* d_output) {
     __syncthreads();
 
     /**
-        
+      If the thread id is less than the radius, the global id is equivalent to the thread id
       */
     if (threadIdx.x < RADIUS)
         ds_input[threadIdx.x] = d_input[global_id];
+
+    /**
+      If the thread id is greater than the dimension of the block minus the radius,
+      then the global id + radius*2 is equivalent to the thread id + radius*2
+      */
     if (threadIdx.x >= blockDim.x - RADIUS)
         ds_input[threadIdx.x + RADIUS*2] = d_input[global_id + RADIUS*2];
     __syncthreads();
-
+    
+    /**
+      Instead of computing the span between (index - radius) and (index + radius),
+      it computes it between (index) and (index + radius*2)
+      */
     int sum = 0;
     for (int j = threadIdx.x; j < threadIdx.x + RADIUS*2; ++j)
         sum += ds_input[j];
