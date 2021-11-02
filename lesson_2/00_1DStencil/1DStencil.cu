@@ -8,7 +8,7 @@ using namespace timer;
 
 const int RADIUS = 7;
 const int BLOCK_SIZE = 16;
-
+const int N = 10000000;
 __global__
 void stencilKernel(const int* d_input, int N,int* d_output) {
     __shared__ int ds_input[BLOCK_SIZE + 2*RADIUS];
@@ -25,8 +25,6 @@ void stencilKernel(const int* d_input, int N,int* d_output) {
         d_output[global_id] = temp;
     }
 }
-
-const int N  = 10000000;
 
 int main() {
     Timer<DEVICE> TM_device;
