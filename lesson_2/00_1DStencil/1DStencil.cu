@@ -9,6 +9,7 @@ using namespace timer;
 const int RADIUS = 7;
 const int BLOCK_SIZE = 16;
 const int N = 10000000;
+
 __global__
 void stencilKernel(const int* d_input, int N,int* d_output) {
     __shared__ int ds_input[BLOCK_SIZE + 2*RADIUS];
@@ -68,7 +69,7 @@ int main() {
 
     // DEVICE INIT
     dim3 dim_grid(N/BLOCK_SIZE, 1, 1);
-    if (N % BLOCK_SIZE) dim_grid++;
+    if (N % BLOCK_SIZE) dim_grid.x++;
     dim3 dim_blocks(BLOCK_SIZE, 1, 1);
 
     // -------------------------------------------------------------------------
