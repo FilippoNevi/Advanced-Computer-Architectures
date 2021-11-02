@@ -94,7 +94,7 @@ int main() {
     // DEVICE EXECUTION
     TM_device.start();
 
-    dim3 num_blocks(N/BLOCK_SIZE_X, N_BLOCK_SIZE_Y, 1);
+    dim3 num_blocks(N/BLOCK_SIZE_X, N/BLOCK_SIZE_Y, 1);
     if (N % BLOCK_SIZE_X) num_blocks.x++;
     if (N % BLOCK_SIZE_Y) num_blocks.y++;
     dim3 block_size(BLOCK_SIZE_X, BLOCK_SIZE_Y, 1);
