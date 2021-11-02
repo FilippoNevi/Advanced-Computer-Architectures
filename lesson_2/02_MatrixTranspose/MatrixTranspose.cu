@@ -14,22 +14,17 @@ void matrixTransposeKernel(const int* d_matrix_in,
                            int        N,
                            int*       d_matrix_out) {
     __shared__ int ds_matrix_in[BLOCK_SIZE_X][BLOCK_SIZE_Y];
-    
-    int bx = blockIdx.x;
-    int by = blockIdx.y;
-    int tx = threadIdx.x;
-    int ty = threadIdx.y;
 
-    int row = by * BLOCK_SIZE_Y + ty;
-    int col = bx * BLOCK_SIZE_X + tx;
+    int row = blockIdx.y * BLOCK_SIZE_Y + threadIdx.y;
+    int col = blockIdx.x * BLOCK_SIZE_X + threadIdx.x;
 
     if(col < N && row < N) {
-        ds_matrix_in[tx][ty] = d_matrix_in[row*N + col];
+        ds_matrix_in[threadIdx.x][threadIdx.y] = d_matrix_in[row*N + col];
         __syncthreads();
 
-        col = by * BLOCK_SIZE_Y + ty;
-        row = bx * BLOCK_SIZE_X + tx;
-        d_matrix_out[row*N + col] = ds_matrix_in[tx][ty];
+        col = blockIdx.y * BLOCK_SIZE_Y + threadIdx.x;
+        row = blockIdx.x * BLOCK_SIZE_X + threadIdx.y;
+        d_matrix_out[row*N + col] = ds_matrix_in[threadIdx.x][threadIdx.y];
     }
 }
 
