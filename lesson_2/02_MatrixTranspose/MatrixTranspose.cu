@@ -27,7 +27,9 @@ void matrixTransposeKernel(const int* d_matrix_in,
         ds_matrix_in[tx][ty] = d_matrix_in[row*N + col];
         __syncthreads();
 
-        d_matrix_out[col*N + row] = ds_matrix_in[tx][ty];
+        col = by * BLOCK_SIZE_Y + ty;
+        row = bx * BLOCK_SIZE_X + tx;
+        d_matrix_out[row*N + col] = ds_matrix_in[tx][ty];
     }
 }
 
