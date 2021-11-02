@@ -17,7 +17,7 @@ void stencilKernel(const int* d_input, int N,int* d_output) {
     int global_id = blockIdx.x * blockDim.x + threadIdx.x;
     if (global_id >= RADIUS && global_id < N-RADIUS) {
         int temp = 0;
-        for(int m = blockIdx.x * blockDim.x; m < (N/BLOCK_SIZE) + RADIUS; ++m) {
+        for(int m = (blockIdx.x * blockDim.x) - RADIUS; m < (N/BLOCK_SIZE) + RADIUS; ++m) {
             ds_input[blockIdx.x] = d_input[global_id];
             __syncthreads();
         }
