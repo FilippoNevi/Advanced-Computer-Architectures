@@ -23,7 +23,7 @@ void matrixTransposeKernel(const int* d_matrix_in,
     int row = by * BLOCK_SIZE_Y + ty;
     int col = bx * BLOCK_SIZE_X + tx;
 
-    if(col < N %% row < N) {
+    if(col < N && row < N) {
         ds_matrix_in[tx][ty] = d_matrix_in[row*N + col];
         __syncthreads();
 
