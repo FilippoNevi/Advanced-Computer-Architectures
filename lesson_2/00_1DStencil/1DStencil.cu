@@ -15,16 +15,33 @@ void stencilKernel(const int* d_input, int N,int* d_output) {
     __shared__ int ds_input[BLOCK_SIZE + 2*RADIUS];
 
     int global_id = blockIdx.x * blockDim.x + threadIdx.x;
-    if (global_id >= RADIUS && global_id < N-RADIUS) {
-        int temp = 0;
-        for(int m = (blockIdx.x * blockDim.x) - RADIUS; m < (N/BLOCK_SIZE) + RADIUS; ++m) {
-            ds_input[blockIdx.x] = d_input[global_id];
-            __syncthreads();
-        }
-        for (int j = global_id-RADIUS; j <= global_id + RADIUS; ++j)
-            temp += ds_input[j];
-        d_output[global_id] = temp;
-    }
+    
+    /**
+        Each thread loads in memory the corresponding item that has index = [global_thread_index + RADIUS]
+      */
+    // ds_input[threadIdx.x + RADIUS] = global_id < N ? d_input[global_id + RADIUS] : 0;
+    if(global_id < N)
+        ds_input[threadIdx.x + RADIUS] = d_input[global_id + RADIUS];
+    else
+        ds_input[threadIdx.x + RADIUS] = 0;
+    __syncthreads();
+
+    /**
+        
+      */
+    if (threadIdx.x < RADIUS)
+        ds_input[threadIdx.x] = d_input[global_id];
+    if (threadIdx.x >= blockDim.x - RADIUS)
+        ds_input[threadIdx.x + RADIUS*2] = d_input[global_id + RADIUS*2];
+    __syncthreads();
+
+    int sum = 0;
+    for (int j = threadIdx.x; j < threadIdx.x + RADIUS*2; ++j)
+        sum += ds_input[j];
+    d_output[global_id + RADIUS] = sum;
+
+    if (global_id >= N - RADIUS && global_id < N)
+        d_output[global_id] = 0;
 }
 
 int main() {
