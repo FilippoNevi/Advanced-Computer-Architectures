@@ -32,10 +32,10 @@ void matrixMultiplicationKernel(const int* d_matrixA,
         // Collaborative loading of d_matrixA and d_matrixB tiles into shared memory
         ds_matrixA[ty][tx] = d_matrixA[row*N + m*BLOCK_SIZE_X+tx];
         ds_matrixB[ty][tx] = d_matrixB[col+(m*BLOCK_SIZE_Y+ty)*N];
-        __synchthreads();
+        __syncthreads();
         for (int k = 0; k < BLOCK_SIZE_X; ++k)
             temp += ds_matrixA[ty][k] * ds_matrixB[k][tx];
-        __synchthreads();
+        __syncthreads();
     }
     d_matrixC[row*N + col] = temp;
 }
