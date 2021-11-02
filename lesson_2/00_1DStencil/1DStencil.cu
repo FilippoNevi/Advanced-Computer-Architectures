@@ -20,10 +20,9 @@ void stencilKernel(const int* d_input, int N,int* d_output) {
         for(int m = 0; m < N/BLOCK_SIZE; ++m) {
             ds_input[blockIdx.x] = d_input[global_id];
             __syncthreads();
-            for (int j = global_id-RADIUS; j <= global_id + RADIUS; ++j)
-                temp += ds_input[j];
-            __syncthreads();
         }
+        for (int j = global_id-RADIUS; j <= global_id + RADIUS; ++j)
+            temp += ds_input[j];
         d_output[global_id] = temp;
     }
 }
