@@ -20,8 +20,9 @@ __global__ void ReduceKernel(int* VectorIN, int N) {
     __syncthreads();
 
     for (int i = 1; i < blockDim.x; i *= 2) {
-        if (threadIdx.x % (i*2) == 0)
-            SMem[threadIdx.x] += SMem[threadIdx.x + i];
+        int index = threadIdx.x * i * 2;
+        if (index < blockDim.x)
+            SMem[index] += SMem[index + i];
         __syncthreads();
     }
 
