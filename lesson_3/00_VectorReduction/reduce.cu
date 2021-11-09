@@ -26,7 +26,7 @@ __global__ void ReduceKernel(int* VectorIN, int N) {
     }
 
     if (threadIdx.x == 0)
-        VectorIn[blockIdx.x] = SMem[0];
+        VectorIN[blockIdx.x] = SMem[0];
 }
 
 int main() {
