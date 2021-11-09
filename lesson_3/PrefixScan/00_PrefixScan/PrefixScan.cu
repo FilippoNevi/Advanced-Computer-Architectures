@@ -16,7 +16,7 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 	//__syncthreads();
 
 	for(int level = 0; level < (int)log2f(N); ++level) {
-		for(int i = 0; i < blockIdx.x * BLOCK_SIZE; ++i) {
+		for(int i = blockIdx.x * BLOCK_SIZE; i < (blockIdx.x * BLOCK_SIZE)+BLOCK_SIZE; ++i) {
 			int offset = (int)powf(2, level);
 			if (i >= offset)
 				//SMem[i] = SMem[i - offset] + SMem[i];
