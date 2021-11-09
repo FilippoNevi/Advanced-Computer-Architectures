@@ -9,17 +9,18 @@ using namespace timer_cuda;
 const int BLOCK_SIZE = 512;
 
 __global__ void PrefixScan(int* VectorIN, int N) {
-	__shared__ int SMem[2014];
+	//__shared__ int SMem[2014];
 	int globalIndex = blockIdx.x * blockDim.x  + threadIdx.x;
-	SMem[threadIdx.x] = VectorIN[globalIndex];
+	//SMem[threadIdx.x] = VectorIN[globalIndex];
 
-	__syncthreads();
+	//__syncthreads();
 
 	for(int level = 0; level < (int)log2f(N); ++level) {
 		for(int i = blockIdx.x*blockDim.x; i < (blockIdx.x*blockDim.x)+blockDim.x; ++i) {
 			int offset = (int)powf(2, level);
 			if (i >= offset)
-				SMem[i] = SMem[i - offset] + SMem[i];
+				//SMem[i] = SMem[i - offset] + SMem[i];
+				VectorIN[i] = VectorIN[i - offset] + VectorIN[i];
 		}
 	}
 }
