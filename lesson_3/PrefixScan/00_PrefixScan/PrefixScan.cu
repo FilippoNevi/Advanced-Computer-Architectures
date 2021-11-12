@@ -14,10 +14,10 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 	//SMem[threadIdx.x] = VectorIN[globalIndex];
 
 	//__syncthreads();
-
-	for(int level = 0; level < log2f(N); ++level) {
+	int offset = 1;
+	for(int level = 0; level < N; level *= 2) {
 		for(int i = blockIdx.x * blockDim.x; i < (blockIdx.x * blockDim.x)+blockDim.x; ++i) {
-			int offset = powf(2, level);
+			offset *= 2;
 			if (i >= offset)
 				//SMem[i] = SMem[i - offset] + SMem[i];
 				VectorIN[i] = VectorIN[i - offset] + VectorIN[i];
