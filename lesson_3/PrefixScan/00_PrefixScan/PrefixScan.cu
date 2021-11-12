@@ -72,13 +72,11 @@ int main() {
 	dev_TM.stop();
 	dev_time = dev_TM.duration();
 
-	__SAFE_CALL(cudaMemcpy(prefixScan, devVectorIN, N * sizeof(int),
-                           cudaMemcpyDeviceToHost) );
+	__SAFE_CALL(cudaMemcpy(prefixScan, devVectorIN, N * sizeof(int), cudaMemcpyDeviceToHost) );
 
 	// ------------------- CUDA ENDING -----------------------------------------
 
-	std::cout << std::fixed << std::setprecision(1)
-              << "KernelTime Naive  : " << dev_time << std::endl << std::endl;
+	std::cout << std::fixed << std::setprecision(1) << "KernelTime Naive  : " << dev_time << std::endl << std::endl;
 
 	// ------------------- VERIFY ----------------------------------------------
 
