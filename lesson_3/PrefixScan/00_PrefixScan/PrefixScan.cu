@@ -2,7 +2,7 @@
 #include <chrono>
 #include <random>
 #include "Timer.cuh"
-#include "CheckError.cuh"
+#include "cuda_err.cuh"
 
 using namespace timer;
 using namespace timer_cuda;
