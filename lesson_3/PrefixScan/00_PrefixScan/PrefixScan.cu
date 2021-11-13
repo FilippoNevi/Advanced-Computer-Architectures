@@ -37,9 +37,9 @@ void printArray(int* Array, int N, const char str[] = "") {
 
 int main() {
 	const int blockDim = BLOCK_SIZE;
-	//const int N = BLOCK_SIZE * 131072;
+	const int N = BLOCK_SIZE * 131072;
 	//const int N = BLOCK_SIZE * 65536;
-	const int N = BLOCK_SIZE * 8192;
+	
     // ------------------- INIT ------------------------------------------------
 
     // Random Engine Initialization
