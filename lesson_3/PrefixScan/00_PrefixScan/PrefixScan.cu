@@ -15,6 +15,7 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 		offset *= 2;
 		if (globalIndex >= offset)
 			VectorIN[globalIndex] = VectorIN[globalIndex - offset] + VectorIN[globalIndex];
+		__syncthreads();
 	}
 }
 
