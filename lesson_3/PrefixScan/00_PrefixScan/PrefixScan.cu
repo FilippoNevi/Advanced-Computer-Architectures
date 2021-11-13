@@ -12,16 +12,18 @@ __global__ int block_counter;
 __global__ void PrefixScan(int* VectorIN, int N) {
 	int globalIndex = blockIdx.x*BLOCK_SIZE + threadIdx.x;
 	int offset = 1;
-	
-	while(block_counter < blockIdx.x);
 
 	for(int level = 1; level < N; level *= 2) {	
+		while (block_counter < blockIdx.x);
+
 		if (globalIndex >= offset && globalIndex < N)
 			VectorIN[globalIndex] = VectorIN[globalIndex - offset] + VectorIN[globalIndex];
 		__syncthreads();
 		offset *= 2;
+		block_counter = blockIdx.x + 1;
+		if (block_counter > DIV(N, blockDim))
+			block_counter = 0;
 	}
-	block_counter = blockIdx.x + 1;
 }
 
 void printArray(int* Array, int N, const char str[] = "") {
