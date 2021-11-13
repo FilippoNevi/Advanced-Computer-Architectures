@@ -9,14 +9,14 @@ using namespace timer_cuda;
 const int BLOCK_SIZE = 512;
 
 __global__ void PrefixScan(int* VectorIN, int N) {
-	/*int offset = 1;
+	int offset = 1;
 	for(int level = 1; level < N; level *= 2) {
 		for(int i = blockIdx.x * blockDim.x; i < (blockIdx.x * blockDim.x)+blockDim.x; ++i) {
 			offset *= 2;
 			if (i >= offset)
 				VectorIN[i] = VectorIN[i - offset] + VectorIN[i];
 		}
-	}*/
+	}
 }
 
 void printArray(int* Array, int N, const char str[] = "") {
