@@ -67,7 +67,7 @@ int main() {
 
 	__SAFE_CALL(cudaMemcpy(prefixScan, devVectorIN, N * sizeof(int), cudaMemcpyDeviceToHost) );
 
-	printArray(VectorIn, N*sizeof(int));
+	printArray(VectorIN, N*sizeof(int));
 	printArray(prefixScan, N*sizeof(int));
 	// ------------------- CUDA ENDING -----------------------------------------
 
