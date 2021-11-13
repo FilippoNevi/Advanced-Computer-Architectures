@@ -67,8 +67,8 @@ int main() {
 
 	__SAFE_CALL(cudaMemcpy(prefixScan, devVectorIN, N * sizeof(int), cudaMemcpyDeviceToHost) );
 
-	printArray(VectorIN, N*sizeof(int));
-	printArray(prefixScan, N*sizeof(int));
+	printArray(VectorIN, 10*sizeof(int));
+	printArray(prefixScan, 10*sizeof(int));
 	// ------------------- CUDA ENDING -----------------------------------------
 
 	std::cout << std::fixed << std::setprecision(1) << "KernelTime Naive  : " << dev_time << std::endl << std::endl;
