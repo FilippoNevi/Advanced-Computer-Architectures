@@ -11,11 +11,11 @@ const int BLOCK_SIZE = 512;
 __global__ void PrefixScan(int* VectorIN, int N) {
 	int globalIndex = blockIdx.x*BLOCK_SIZE + threadIdx.x;
 	int offset = 1;
-	for(int level = 1; level < N; level *= 2) {
-		offset *= 2;
+	for(int level = 1; level < N; level *= 2) {	
 		if (globalIndex >= offset)
 			VectorIN[globalIndex] = VectorIN[globalIndex - offset] + VectorIN[globalIndex];
 		__syncthreads();
+		offset *= 2;
 	}
 }
 
