@@ -23,7 +23,6 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 				VectorIN[i] = VectorIN[i - offset] + VectorIN[i];
 		}
 	}
-	__syncthreads();
 }
 
 void printArray(int* Array, int N, const char str[] = "") {
@@ -73,6 +72,7 @@ int main() {
 	dev_TM.stop();
 	dev_time = dev_TM.duration();
 
+	CHECK_CUDA_ERROR;
 	__SAFE_CALL(cudaMemcpy(prefixScan, devVectorIN, N * sizeof(int), cudaMemcpyDeviceToHost) );
 
 	// ------------------- CUDA ENDING -----------------------------------------
