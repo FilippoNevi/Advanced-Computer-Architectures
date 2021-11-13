@@ -9,20 +9,14 @@ using namespace timer_cuda;
 const int BLOCK_SIZE = 512;
 
 __global__ void PrefixScan(int* VectorIN, int N) {
-	//__shared__ int SMem[2014];
-	int globalIndex = blockIdx.x * blockDim.x  + threadIdx.x;
-	//SMem[threadIdx.x] = VectorIN[globalIndex];
-
-	//__syncthreads();
-	int offset = 1;
+	/*int offset = 1;
 	for(int level = 1; level < N; level *= 2) {
 		for(int i = blockIdx.x * blockDim.x; i < (blockIdx.x * blockDim.x)+blockDim.x; ++i) {
 			offset *= 2;
 			if (i >= offset)
-				//SMem[i] = SMem[i - offset] + SMem[i];
 				VectorIN[i] = VectorIN[i - offset] + VectorIN[i];
 		}
-	}
+	}*/
 }
 
 void printArray(int* Array, int N, const char str[] = "") {
@@ -38,7 +32,6 @@ void printArray(int* Array, int N, const char str[] = "") {
 int main() {
 	const int blockDim = BLOCK_SIZE;
 	const int N = BLOCK_SIZE * 131072;
-	//const int N = BLOCK_SIZE * 65536;
 	
     // ------------------- INIT ------------------------------------------------
 
