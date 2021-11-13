@@ -7,16 +7,21 @@ using namespace timer;
 using namespace timer_cuda;
 
 const int BLOCK_SIZE = 512;
+int block_counter;
 
 __global__ void PrefixScan(int* VectorIN, int N) {
 	int globalIndex = blockIdx.x*BLOCK_SIZE + threadIdx.x;
 	int offset = 1;
+	
+	while(block_counter < blockIdx.x);
+
 	for(int level = 1; level < N; level *= 2) {	
 		if (globalIndex >= offset && globalIndex < N)
 			VectorIN[globalIndex] = VectorIN[globalIndex - offset] + VectorIN[globalIndex];
 		__syncthreads();
 		offset *= 2;
 	}
+	block_counter = blockIdx.x + 1;
 }
 
 void printArray(int* Array, int N, const char str[] = "") {
@@ -26,6 +31,12 @@ void printArray(int* Array, int N, const char str[] = "") {
 	std::cout << std::endl << std::endl;
 }
 
+void printArray(int* Array, int start, int end, const char str[] = "") {
+	std::cout << str;
+	for (int i = start; i < end; ++i)
+		std::cout << std::setw(5) << Array[i] << ' ';
+	std::cout << std::endl << std::endl;
+}
 
 #define DIV(a,b)	(((a) + (b) - 1) / (b))
 
@@ -57,6 +68,7 @@ int main() {
 
 	int* prefixScan = new int[N];
 	float dev_time;
+	block_counter = 0;
 
 	// ------------------- CUDA COMPUTATION 1 ----------------------------------
 
