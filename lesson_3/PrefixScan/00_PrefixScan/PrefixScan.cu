@@ -73,7 +73,7 @@ int main() {
 	dev_TM.stop();
 	dev_time = dev_TM.duration();
 
-	__CUDA_ERROR;
+	__CUDA_ERROR('');
 	__SAFE_CALL(cudaMemcpy(prefixScan, devVectorIN, N * sizeof(int), cudaMemcpyDeviceToHost) );
 
 	// ------------------- CUDA ENDING -----------------------------------------
