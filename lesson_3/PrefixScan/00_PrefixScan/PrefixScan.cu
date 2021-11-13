@@ -2,7 +2,6 @@
 #include <chrono>
 #include <random>
 #include "Timer.cuh"
-#include "cuda_err.cuh"
 
 using namespace timer;
 using namespace timer_cuda;
@@ -73,7 +72,6 @@ int main() {
 	dev_TM.stop();
 	dev_time = dev_TM.duration();
 
-	__CUDA_ERROR('a');
 	__SAFE_CALL(cudaMemcpy(prefixScan, devVectorIN, N * sizeof(int), cudaMemcpyDeviceToHost) );
 
 	// ------------------- CUDA ENDING -----------------------------------------
