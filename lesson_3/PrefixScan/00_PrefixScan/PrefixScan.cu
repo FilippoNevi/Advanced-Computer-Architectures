@@ -10,7 +10,7 @@ const int BLOCK_SIZE = 512;
 __device__ int block_counter;
 
 __global__ void PrefixScan(int* VectorIN, int N) {
-	int globalIndex = blockIdx.x*BLOCK_SIZE + threadIdx.x;
+	int globalIndex = blockIdx.x*blockDim.x + threadIdx.x;
 	int offset = 1;
 
 	for(int level = 1; level < N; level *= 2) {	
@@ -81,8 +81,6 @@ int main() {
 
 	__SAFE_CALL(cudaMemcpy(prefixScan, devVectorIN, N * sizeof(int), cudaMemcpyDeviceToHost) );
 
-	printArray(VectorIN, 10*sizeof(int));
-	printArray(prefixScan, 10*sizeof(int));
 	// ------------------- CUDA ENDING -----------------------------------------
 
 	std::cout << std::fixed << std::setprecision(1) << "KernelTime Naive  : " << dev_time << std::endl << std::endl;
