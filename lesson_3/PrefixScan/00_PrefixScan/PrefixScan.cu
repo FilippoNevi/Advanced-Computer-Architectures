@@ -21,7 +21,7 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 		__syncthreads();
 		offset *= 2;
 		block_counter = blockIdx.x + 1;
-		if (block_counter > ((N+blockDim)-1)/blockDim)
+		if (block_counter > ((N+blockDim.x)-1)/blockDim.x)
 			block_counter = 0;
 	}
 }
