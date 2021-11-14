@@ -7,7 +7,7 @@ using namespace timer;
 using namespace timer_cuda;
 
 const int BLOCK_SIZE = 512;
-__global__ int block_counter;
+int block_counter;
 
 __global__ void PrefixScan(int* VectorIN, int N) {
 	int globalIndex = blockIdx.x*BLOCK_SIZE + threadIdx.x;
@@ -21,7 +21,7 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 		__syncthreads();
 		offset *= 2;
 		block_counter = blockIdx.x + 1;
-		if (block_counter > DIV(N, blockDim))
+		if (block_counter > ((N+blockDim)-1)/blockDim)
 			block_counter = 0;
 	}
 }
