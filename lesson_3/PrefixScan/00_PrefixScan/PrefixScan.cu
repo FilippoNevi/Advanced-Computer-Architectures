@@ -70,7 +70,6 @@ int main() {
 
 	int* prefixScan = new int[N];
 	float dev_time;
-	block_counter = 0;
 
 	// ------------------- CUDA COMPUTATION 1 ----------------------------------
 
