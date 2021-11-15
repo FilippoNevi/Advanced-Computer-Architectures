@@ -69,8 +69,6 @@ int main() {
 
 	dev_TM.start();
 	PrefixScan<<<DIV(N, BLOCK_SIZE), BLOCK_SIZE>>>(devVectorIN, N);
-	PrefixScan<<<DIV(N, BLOCK_SIZE * BLOCK_SIZE), BLOCK_SIZE>>>(devVectorIN, DIV(N, BLOCK_SIZE));
-	PrefixScan<<<DIV(N, BLOCK_SIZE * BLOCK_SIZE * BLOCK_SIZE), BLOCK_SIZE>>>(devVectorIN, DIV(N, BLOCK_SIZE * BLOCK_SIZE));
 	dev_TM.stop();
 	dev_time = dev_TM.duration();
 
