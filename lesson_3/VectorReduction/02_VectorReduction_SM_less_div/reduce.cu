@@ -13,7 +13,7 @@ const int N  = 16777216;
 #define BLOCK_SIZE 256
 
 __global__ void ReduceKernel(int* VectorIN, int N) {
-    __shared__ int SMem[BLOCK_SIZE];
+    __shared__ int SMem[1024];
     int GlobalIndex = blockIdx.x * blockDim.x + threadIdx.x;
     SMem[threadIdx.x] = VectorIN[GlobalIndex];
 
@@ -21,7 +21,7 @@ __global__ void ReduceKernel(int* VectorIN, int N) {
 
     for (int i = 1; i < blockDim.x; i *= 2) {
         int index = threadIdx.x * i * 2;
-        if ((index+i) < (blockDim.x-1))
+        if (index < blockDim.x)
             SMem[index] += SMem[index + i];
         __syncthreads();
     }
