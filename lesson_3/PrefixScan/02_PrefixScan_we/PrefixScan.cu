@@ -107,7 +107,8 @@ int main() {
 	std::partial_sum(VectorIN, VectorIN + N, host_result);
 
     host_TM.stop();
-
+	printArray(prefixScan, 10);
+	printArry(host_result, 10);
 	if (!std::equal(host_result, host_result + blockDim - 1, prefixScan + 1)) {
 		std::cerr << " Error! :  prefixScan" << std::endl << std::endl;
 		cudaDeviceReset();
