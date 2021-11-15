@@ -94,7 +94,8 @@ int main() {
 	dev_time = dev_TM.duration();
 
 	__SAFE_CALL(cudaMemcpy(prefixScan, devVectorIN, N * sizeof(int), cudaMemcpyDeviceToHost) );
-
+	printArray(prefixScan, 10);
+	printArray(vectorIN, 10);
 	// ------------------- CUDA ENDING -----------------------------------------
 
 	std::cout << std::fixed << std::setprecision(1) << "KernelTime Naive  : " << dev_time << std::endl << std::endl;
@@ -107,8 +108,7 @@ int main() {
 	std::partial_sum(VectorIN, VectorIN + N, host_result);
 
     host_TM.stop();
-	printArray(prefixScan, 10);
-	printArry(host_result, 10);
+
 	if (!std::equal(host_result, host_result + blockDim - 1, prefixScan + 1)) {
 		std::cerr << " Error! :  prefixScan" << std::endl << std::endl;
 		cudaDeviceReset();
