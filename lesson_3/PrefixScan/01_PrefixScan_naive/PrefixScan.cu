@@ -7,24 +7,16 @@ using namespace timer;
 using namespace timer_cuda;
 
 const int BLOCK_SIZE = 512;
-__device__ int block_counter;
 
 __global__ void PrefixScan(int* VectorIN, int N) {
 	int globalIndex = blockIdx.x*blockDim.x + threadIdx.x;
 	int offset = 1;
-	if (blockIdx.x == 0)
-		block_counter = blockIdx.x;
 
 	for(int level = 1; level < N; level *= 2) {	
-		while (block_counter < blockIdx.x);
-
 		if (globalIndex >= offset && globalIndex < N)
 			VectorIN[globalIndex] = VectorIN[globalIndex - offset] + VectorIN[globalIndex];
 		__syncthreads();
 		offset *= 2;
-		block_counter = blockIdx.x + 1;
-		if (block_counter > ((N+blockDim.x)-1)/blockDim.x)
-			block_counter = 0;
 	}
 }
 
@@ -76,7 +68,9 @@ int main() {
 	// ------------------- CUDA COMPUTATION 1 ----------------------------------
 
 	dev_TM.start();
-	PrefixScan<<<DIV(N, blockDim), blockDim>>>(devVectorIN, N);
+	PrefixScan<<<DIV(N, BLOCK_SIZE), BLOCK_SIZE>>>(devVectorIN, N);
+	PrefixScan<<<DIV(N, BLOCK_SIZE * BLOCK_SIZE), BLOCK_SIZE>>>(devVectorIN, DIV(N, BLOCK_SIZE));
+	PrefixScan<<<DIV(N, BLOCK_SIZE * BLOCK_SIZE * BLOCK_SIZE), BLOCK_SIZE>>>(devVectorIN, DIV(N, BLOCK_SIZE * BLOCK_SIZE));
 	dev_TM.stop();
 	dev_time = dev_TM.duration();
 
