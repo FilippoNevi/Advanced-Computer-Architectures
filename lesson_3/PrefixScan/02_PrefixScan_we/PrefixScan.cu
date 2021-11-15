@@ -16,7 +16,7 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 	step = 1;
 	for (limit = blockDim.x / 2; limit > 0; limit /= 2) {
 		if (threadIdx.x < limit) {
-			valueRight = (threadIdx.x + 1) * (step * 2) -1;
+			valueRight = (threadIdx.x + 1) * (step * 2) - 1;
 			valueLeft = valueRight - step;
 			VectorIN[valueRight] = VectorIN[valueRight] + VectorIN[valueLeft];
 		}
@@ -94,6 +94,7 @@ int main() {
 	dev_TM.stop();
 	dev_time = dev_TM.duration();
 
+	printArray(devVectorIN, 10);
 	__SAFE_CALL(cudaMemcpy(prefixScan, devVectorIN, N * sizeof(int), cudaMemcpyDeviceToHost) );
 
 	// ------------------- CUDA ENDING -----------------------------------------
