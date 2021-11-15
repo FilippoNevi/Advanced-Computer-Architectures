@@ -13,7 +13,7 @@ const int N  = 16777216;
 #define BLOCK_SIZE 256
 
 __global__ void ReduceKernel(int* VectorIN, int N) {
-    __shared__ int SMem[1024];
+    __shared__ int SMem[BLOCK_SIZE];
     int GlobalIndex = blockIdx.x * blockDim.x + threadIdx.x;
     SMem[threadIdx.x] = VectorIN[GlobalIndex];
 
