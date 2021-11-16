@@ -31,7 +31,7 @@ __global__ void ReduceKernel(int* VectorIN, int N) {
 }
 
 int main() {
-    
+    {    
     // ------------------- INIT ------------------------------------------------
 
     // Random Engine Initialization
@@ -113,5 +113,6 @@ int main() {
 
     delete[] VectorIN;
     SAFE_CALL( cudaFree(devVectorIN) );
+}
     cudaDeviceReset();
 }
