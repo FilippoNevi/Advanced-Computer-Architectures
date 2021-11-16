@@ -46,10 +46,10 @@ int main() {
         for (int j = 0; j < height; ++j)
             h_MatrixA[i*width + j] = distribution(generator);
 
-    int* d_matrixA, d_matrixB;
-    SAFE_CALL(cudaMalloc(&d_matrixA, width * height * sizeof(int)));
-    SAFE_CALL(cudaMalloc(&d_matrixB, width * height * sizeof(int)));
-    SAFE_CALL(cudaMemcpy(d_matrixA, h_matrixA, width * height * sizeof(int), cudaMemcpyHostToDevice));
+    int* d_MatrixA, d_MatrixB;
+    SAFE_CALL(cudaMalloc(&d_MatrixA, width * height * sizeof(int)));
+    SAFE_CALL(cudaMalloc(&d_MatrixB, width * height * sizeof(int)));
+    SAFE_CALL(cudaMemcpy(d_MatrixA, h_MatrixA, width * height * sizeof(int), cudaMemcpyHostToDevice));
 
     std::cout<<"Starting computation on DEVICE "<<std::endl;
 
