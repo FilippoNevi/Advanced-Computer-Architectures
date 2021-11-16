@@ -13,7 +13,7 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 	int valueRight, valueLeft;
 	int globalIndex = blockIdx.x * blockDim.x + threadIdx.x;
 	step = 1;
-	for (limit = blockDim.x / 2; limit > 0; limit /= 2) {
+	for (limit = (blockIdx.x * blockDim.x) / 2; limit > 0; limit /= 2) {
 		if (globalIndex < limit) {
 			valueRight = (globalIndex + 1) * (step * 2) - 1;
 			valueLeft = valueRight - step;
@@ -28,7 +28,7 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 	__syncthreads();
 
 	limit = 1;	
-	for (step = blockDim.x / 2; step > 0; step /= 2) {
+	for (step = (blockIdx.x * blockDim.x) / 2; step > 0; step /= 2) {
 		if (globalIndex < limit) {
 			valueRight = (globalIndex * 2 + 1) * step - 1;
 			valueLeft = valueRight - step;
