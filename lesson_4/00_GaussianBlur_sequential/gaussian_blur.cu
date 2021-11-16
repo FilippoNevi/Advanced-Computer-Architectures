@@ -42,14 +42,36 @@ int main() {
     Timer<DEVICE> dev_TM;
 
     int* h_MatrixA = new int[width * height];
-    for (int i = 0; i < width; ++i)
-        for (int j = 0; j < height; ++j)
-            h_MatrixA[i*width + j] = distribution(generator);
+    int* h_MatrixB = new int[width * height];
 
     int *d_MatrixA, *d_MatrixB;
     SAFE_CALL(cudaMalloc(&d_MatrixA, width * height * sizeof(int)));
     SAFE_CALL(cudaMalloc(&d_MatrixB, width * height * sizeof(int)));
     SAFE_CALL(cudaMemcpy(d_MatrixA, h_MatrixA, width * height * sizeof(int), cudaMemcpyHostToDevice));
+
+
+    for (int i = 0; i < width; ++i)
+        for (int j = 0; j < height; ++j)
+            h_MatrixA[i*width + j] = distribution(generator);
+
+
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            for (int channel = 0; channel < 3; ++channel) {
+                float pixel_value = 0;
+                for (int u = 0; u < N; ++u) {
+                    for (int v = 0; v < N; ++v) {
+                        int new_x = min(width, max(0, x+u-N/2));
+                        int new_y = min(height, max(0, y+v-N/2));
+                        pixel_value += mask[v*N+u]*h_MatrixA[(new_y * width + new_x) * 4 + channel];
+                    }
+                }
+                h_MatrixB[(y * width + x) * 4 + channel] = (unsigned char)pixel_value;
+            }
+            // no transparency
+            h_MatrixB[(y * width + x) * 4 + 3] = (unsigned char)255;
+        }
+    }
 
     std::cout<<"Starting computation on DEVICE "<<std::endl;
 
