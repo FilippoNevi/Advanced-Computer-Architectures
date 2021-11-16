@@ -41,6 +41,7 @@ void printArray(int* Array, int start, int end, const char str[] = "") {
 #define DIV(a,b)	(((a) + (b) - 1) / (b))
 
 int main() {
+ {
 	const int blockDim = BLOCK_SIZE;
 	const int N = BLOCK_SIZE * 131072;
 	
@@ -113,4 +114,5 @@ int main() {
     __SAFE_CALL( cudaFree(devVectorIN) );
     
     cudaDeviceReset();
+ }
 }
