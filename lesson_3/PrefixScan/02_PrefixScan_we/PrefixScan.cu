@@ -46,8 +46,8 @@ __global__ void PrefixScan(int* VectorIN, int N) /*{
 	int step = 1;
 	int valueRight, valueLeft;
 
-	for (int level = 1; i < N; level *= 2) {
-		if (i % (step * 2) == 0) {
+	for (int level = 1; level < N; level *= 2) {
+		if (globalIndex % (step * 2) == 0) {
 			valueRight = (globalIndex + 1) * (step * 2) -1;
 			valueLeft = valueRight - step;
 			VectorIN[valueRight] = VectorIN[valueRight] + VectorIN[valueLeft];
@@ -62,7 +62,7 @@ __global__ void PrefixScan(int* VectorIN, int N) /*{
 
 	for(int level = (N / 2); level >= 1; level /= 2, k *= 2) {
 		if (globalIndex < k) {
-			valueLeft = (i * 2 + 1) * step - 1;
+			valueLeft = (globalIndex * 2 + 1) * step - 1;
 			valueRight = valueLeft + step;
 			int tmp = VectorIN[valueLeft];
 			VectorIN[valueLeft] = VectorIN[valueRight];
