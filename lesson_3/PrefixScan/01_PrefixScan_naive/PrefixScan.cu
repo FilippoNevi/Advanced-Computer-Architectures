@@ -18,6 +18,10 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 		__syncthreads();
 		offset *= 2;
 	}
+
+	if (blockIdx.x > 0)
+		VectorIN[globalIndex] += VectorIN[(blockIdx.x - 1) * blockDim.x];
+	__syncthreads();
 }
 
 void printArray(int* Array, int N, const char str[] = "") {
