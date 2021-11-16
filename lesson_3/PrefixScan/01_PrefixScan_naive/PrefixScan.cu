@@ -92,7 +92,7 @@ int main() {
     host_TM.stop();
 
 
-	if (!std::equal(host_result, host_result + blockDim - 1, prefixScan + 1)) {
+	if (!std::equal(host_result, host_result + blockDim - 1, prefixScan)) {
 		std::cerr << " Error! :  prefixScan" << std::endl << std::endl;
 		cudaDeviceReset();
 		std::exit(EXIT_FAILURE);
