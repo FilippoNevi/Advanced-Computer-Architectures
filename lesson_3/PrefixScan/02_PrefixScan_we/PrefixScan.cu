@@ -8,7 +8,7 @@ using namespace timer_cuda;
 
 const int BLOCK_SIZE = 512;
 
-__global__ void PrefixScan(int* VectorIN, int N) {
+__global__ void PrefixScan(int* VectorIN, int N) /*{
 	int step, limit;
 	int valueRight, valueLeft;
 	int globalIndex = blockIdx.x * blockDim.x + threadIdx.x;
@@ -38,6 +38,37 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 		}
 		limit *= 2;
 		__syncthreads();
+	}
+}
+*/
+{
+	int globalIndex = (blockIdx.x * blockDim.x) + threadIdx.x;
+	int step = 1;
+	int valueRight, valueLeft;
+
+	for (int level = 1; i < N; level *= 2) {
+		if (i % (step * 2) == 0) {
+			valueRight = (globalIndex + 1) * (step * 2) -1;
+			valueLeft = valueRight - step;
+			VectorIN[valueRight] = VectorIN[valueRight] + VectorIN[valueLeft];
+		}
+		step *= 2;
+	}
+
+	VectorIN[N-1] = 0;
+	
+	int k = 1;
+	step = 1;
+
+	for(int level = (N / 2); level >= 1; level /= 2, k *= 2) {
+		if (globalIndex < k) {
+			valueLeft = (i * 2 + 1) * step - 1;
+			valueRight = valueLeft + step;
+			int tmp = VectorIN[valueLeft];
+			VectorIN[valueLeft] = VectorIN[valueRight];
+			VectorIN[valueRight] = tmp + VectorIN[valueRight];
+		}
+		step *= 2;
 	}
 }
 
