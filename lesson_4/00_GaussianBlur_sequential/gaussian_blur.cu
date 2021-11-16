@@ -41,7 +41,7 @@ int main() {
     Timer<HOST> host_TM;
     Timer<DEVICE> dev_TM;
 
-    int* h_MatrixA = new int[width][height];
+    int* h_MatrixA = new int[width * height];
     for (int i = 0; i < width; ++i)
         for (int j = 0; j < height; ++j)
             h_MatrixA[i][j] = distribution(generator);
