@@ -46,7 +46,7 @@ int main() {
         for (int j = 0; j < height; ++j)
             h_MatrixA[i*width + j] = distribution(generator);
 
-    int* d_MatrixA, d_MatrixB;
+    int *d_MatrixA, *d_MatrixB;
     SAFE_CALL(cudaMalloc(&d_MatrixA, width * height * sizeof(int)));
     SAFE_CALL(cudaMalloc(&d_MatrixB, width * height * sizeof(int)));
     SAFE_CALL(cudaMemcpy(d_MatrixA, h_MatrixA, width * height * sizeof(int), cudaMemcpyHostToDevice));
@@ -54,7 +54,7 @@ int main() {
     std::cout<<"Starting computation on DEVICE "<<std::endl;
 
     dev_TM.start();
-    GaussianBlur<<<DIV(N, BLOCK_SIZE), BLOCK_SIZE>>>(d_matrixA, d_matrixB, N, height, width);
+    GaussianBlur<<<DIV(N, BLOCK_SIZE), BLOCK_SIZE>>>(d_MatrixA, d_MatrixB, N, height, width);
 
     dev_TM.stop();
     dev_time = dev_TM.duration();
