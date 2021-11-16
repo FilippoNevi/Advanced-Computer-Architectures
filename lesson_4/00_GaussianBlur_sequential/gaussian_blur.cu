@@ -22,7 +22,7 @@ __global__ void GaussianBlur(int* MatrixA, int* MatrixB, int N, int height, int 
                     for (int v = 0; v < N; ++v) {
                         int new_x = min(width, max(0, x+u-N/2));
                         int new_y = min(height, max(0, y+v-N/2));
-                        pixel_value += mask[v*N+u]*MatrixA[(new_y*width+new_x)*4+channel];
+                        pixel_value += MatrixA[v*N+u]*MatrixA[(new_y*width+new_x)*4+channel];
                     }
                 }
                 MatrixB[(y*width+x)*4+channel] = (unsigned char)pixel_value;
@@ -41,15 +41,15 @@ int main() {
     Timer<HOST> host_TM;
     Timer<DEVICE> dev_TM;
 
-    int* h_MatrixA = new int[N][N];
-    for (int i = 0; i < N; ++i)
-        for (int j = 0; j < N; ++j)
+    int* h_MatrixA = new int[width][height];
+    for (int i = 0; i < width; ++i)
+        for (int j = 0; j < height; ++j)
             h_MatrixA[i][j] = distribution(generator);
 
     int* d_matrixA, d_matrixB;
-    SAFE_CALL(cudaMalloc(&d_matrixA, N * N * sizeof(int)));
-    SAFE_CALL(cudaMalloc(&d_matrixB, N * N * sizeof(int)));
-    SAFE_CALL(cudaMemcpy(d_matrixA, h_matrixA, N * N * sizeof(int), cudaMemcpyHostToDevice));
+    SAFE_CALL(cudaMalloc(&d_matrixA, width * height * sizeof(int)));
+    SAFE_CALL(cudaMalloc(&d_matrixB, width * height * sizeof(int)));
+    SAFE_CALL(cudaMemcpy(d_matrixA, h_matrixA, width * height * sizeof(int), cudaMemcpyHostToDevice));
 
     std::cout<<"Starting computation on DEVICE "<<std::endl;
 
