@@ -24,7 +24,7 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 	}
 	
 	if (globalIndex == 0)
-		VectorIN[blockDim.x - 1] = 0;
+		VectorIN[(blockIdx.x * blockDim.x) - 1] = 0;
 	__syncthreads();
 
 	limit = 1;	
