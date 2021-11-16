@@ -44,7 +44,7 @@ int main() {
     int* h_MatrixA = new int[N][N];
     for (int i = 0; i < N; ++i)
         for (int j = 0; j < N; ++j)
-            MatrixA[i][j] = distribution(generator);
+            h_MatrixA[i][j] = distribution(generator);
 
     int* d_matrixA, d_matrixB;
     SAFE_CALL(cudaMalloc(&d_matrixA, N * N * sizeof(int)));
