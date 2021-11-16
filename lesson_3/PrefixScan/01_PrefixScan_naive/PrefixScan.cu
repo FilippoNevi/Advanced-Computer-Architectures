@@ -18,7 +18,7 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 		__syncthreads();
 		offset *= 2;
 	}
-
+	__syncthreads();
 	if (blockIdx.x > 0)
 		VectorIN[globalIndex] += VectorIN[(blockIdx.x - 1) * blockDim.x];
 	__syncthreads();
