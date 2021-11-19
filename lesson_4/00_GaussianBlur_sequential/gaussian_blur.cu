@@ -50,13 +50,7 @@ int main() {
     SAFE_CALL(cudaMemcpy(d_MatrixA, h_MatrixA, width * height * sizeof(int), cudaMemcpyHostToDevice));
     
     float *mask = new float[N * N];
-    mask = {
-        0.0030, 0.0133, 0.0219, 0.0133, 0.0030,
-        0.0133, 0.0596, 0.0983, 0.0596, 0.0133,
-        0.0219, 0.0983, 0.1621, 0.0983, 0.0219,
-        0.0133, 0.0596, 0.0983, 0.0596, 0.0133, 
-        0.0030, 0.0133, 0.0219, 0.0133, 0.0030
-    };
+    mask = { 0.0030, 0.0133, 0.0219, 0.0133, 0.0030, 0.0133, 0.0596, 0.0983, 0.0596, 0.0133, 0.0219, 0.0983, 0.1621, 0.0983, 0.0219, 0.0133, 0.0596, 0.0983, 0.0596, 0.0133, 0.0030, 0.0133, 0.0219, 0.0133, 0.0030 };
    
     for (int i = 0; i < width; ++i)
         for (int j = 0; j < height; ++j)
@@ -87,7 +81,7 @@ int main() {
     GaussianBlur<<<DIV(N, BLOCK_SIZE), BLOCK_SIZE>>>(d_MatrixA, d_MatrixB, mask, N, height, width);
 
     dev_TM.stop();
-    dev_time = dev_TM.duration();
+    //dev_time = dev_TM.duration();
     CHECK_CUDA_ERROR;
     
 }
