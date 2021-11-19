@@ -13,14 +13,6 @@ const int width = 2000;
 const int N = 5;
 #define BLOCK_SIZE 256
 
-float *mask = {
-    {0.0030, 0.0133, 0.0219, 0.0133, 0.0030},
-    {0.0133, 0.0596, 0.0983, 0.0596, 0.0133},
-    {0.0219, 0.0983, 0.1621, 0.0983, 0.0219},
-    {0.0133, 0.0596, 0.0983, 0.0596, 0.0133}, 
-    {0.0030, 0.0133, 0.0219, 0.0133, 0.0030}
-};
-
 __global__ void GaussianBlur(int* MatrixA, int* MatrixB, float* mask, int N, int height, int width) {
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
@@ -56,8 +48,16 @@ int main() {
     SAFE_CALL(cudaMalloc(&d_MatrixA, width * height * sizeof(int)));
     SAFE_CALL(cudaMalloc(&d_MatrixB, width * height * sizeof(int)));
     SAFE_CALL(cudaMemcpy(d_MatrixA, h_MatrixA, width * height * sizeof(int), cudaMemcpyHostToDevice));
-
-
+    
+    float *mask = new float[N * N];
+    *mask = {
+        {0.0030, 0.0133, 0.0219, 0.0133, 0.0030},
+        {0.0133, 0.0596, 0.0983, 0.0596, 0.0133},
+        {0.0219, 0.0983, 0.1621, 0.0983, 0.0219},
+        {0.0133, 0.0596, 0.0983, 0.0596, 0.0133}, 
+        {0.0030, 0.0133, 0.0219, 0.0133, 0.0030}
+    };
+   
     for (int i = 0; i < width; ++i)
         for (int j = 0; j < height; ++j)
             h_MatrixA[i*width + j] = distribution(generator);
