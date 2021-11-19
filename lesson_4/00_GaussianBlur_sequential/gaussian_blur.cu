@@ -13,7 +13,7 @@ const int width = 2000;
 const int N = 5;
 #define BLOCK_SIZE 256
 
-float mask[N][N] = {
+float *mask = {
     {0.0030, 0.0133, 0.0219, 0.0133, 0.0030},
     {0.0133, 0.0596, 0.0983, 0.0596, 0.0133},
     {0.0219, 0.0983, 0.1621, 0.0983, 0.0219},
@@ -84,7 +84,7 @@ int main() {
     std::cout<<"Starting computation on DEVICE "<<std::endl;
 
     dev_TM.start();
-    GaussianBlur<<<DIV(N, BLOCK_SIZE), BLOCK_SIZE>>>(d_MatrixA, d_MatrixB, &mask, N, height, width);
+    GaussianBlur<<<DIV(N, BLOCK_SIZE), BLOCK_SIZE>>>(d_MatrixA, d_MatrixB, mask, N, height, width);
 
     dev_TM.stop();
     dev_time = dev_TM.duration();
