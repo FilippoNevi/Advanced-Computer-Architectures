@@ -57,7 +57,7 @@ int main() {
             h_MatrixA[i*width + j] = distribution(generator);
 
 
-    /*for (int y = 0; y < height; ++y) {
+    for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             for (int channel = 0; channel < 3; ++channel) {
                 float pixel_value = 0;
@@ -73,12 +73,12 @@ int main() {
             // no transparency
             h_MatrixB[(y * width + x) * 4 + 3] = (unsigned char)255;
         }
-    }*/
+    }
 
     std::cout<<"Starting computation on DEVICE "<<std::endl;
 
     dev_TM.start();
-    GaussianBlur<<<DIV(N, BLOCK_SIZE), BLOCK_SIZE>>>(d_MatrixA, d_MatrixB, mask, N, height, width);
+    //GaussianBlur<<<DIV(N, BLOCK_SIZE), BLOCK_SIZE>>>(d_MatrixA, d_MatrixB, mask, N, height, width);
 
     dev_TM.stop();
     //dev_time = dev_TM.duration();
