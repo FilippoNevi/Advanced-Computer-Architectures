@@ -45,7 +45,7 @@ int main() {
    
     unsigned char* h_matrix_in = new unsigned char[WIDTH * HEIGHT * CHANNELS];
     unsigned char* h_matrix_out = new unsigned char[WIDTH * HEIGHT * CHANNELS];
-
+    unsigned char* d_matrix_out_tmp = new unsigned char[WIDTH * HEIGHT * CHANNELS];
     unsigned char *d_matrix_in, *d_matrix_out, *d_mask;
 
     SAFE_CALL(cudaMalloc(&d_matrix_in, WIDTH * HEIGHT * CHANNELS *  sizeof(unsigned char)));
@@ -72,7 +72,8 @@ int main() {
 
     CHECK_CUDA_ERROR;
 
-//    SAFE_CALL(cudaMemcpy(h_image_out, d_image_out
+    SAFE_CALL(cudaMemcpy(d_image_out_tmp, d_image_out, WIDTH * HEIGHT * CHANNELS * sizeof(unsigned char), cudaMemcpyDeviceToHost));
+
     host_TM.start();
 
     for (int y = 0; y < HEIGHT; ++y) {
@@ -97,8 +98,25 @@ int main() {
 
     for (int i = 0; i < HEIGHT; ++i) {
         for(int j = 0; j < WIDTH; ++j) {
-            if(h_matrix_out[i * WIDTH + j] < d_matrix_out
-    
+            if(h_matrix_out[i * WIDTH + j] < d_matrix_out < d_matrix_out_tmp[i * WIDTH + j]-1 || h_matrix_out[i * WIDTH + j] > d_matrix_out[i * WIDTH + j]+1) {
+                std::cerr << "wrong result at indexes [" << i << "][ " << j << "]" << std::endl;
+                std::cerr << "Host's value = " << (short)h_matrix_out[i * WIDTH + j] << std::endl;
+                std::cerr << "Device's value = " << (short)d_matrix_out_tmp[i * WIDTH + j] << std::endl;
+                cudaDeviceReset();
+                std::exit(EXIT_FAILURE);
+            }
+        }
+    }
+    std::cout << "<> Correct!\n\n";
+
+    delete[] h_matrix_in;
+    delete[] h_matrix_out;
+    delete[] h_matrix_out_tmp;
+   
+    SAFE_CALL( cudaFree(d_matrix_in) );
+    SAFE_CALL( cudaFree(d_matrix_out) );
+    SAFE_CALL( cudaFree(mask) );
+
     std::cout << host_TM.duration() << std::endl;
     cudaDeviceReset();
 }
