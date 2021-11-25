@@ -39,15 +39,15 @@ int main() {
     std::uniform_int_distribution<int> distribution(1, 100);
     
     Timer<HOST> host_TM;
-    Timer<DEVICE> dev_TM;
+//    Timer<DEVICE> dev_TM;
 
     int* h_MatrixA = new int[width * height];
     int* h_MatrixB = new int[width * height];
 
-    int *d_MatrixA, *d_MatrixB;
-    SAFE_CALL(cudaMalloc(&d_MatrixA, width * height * sizeof(int)));
-    SAFE_CALL(cudaMalloc(&d_MatrixB, width * height * sizeof(int)));
-    SAFE_CALL(cudaMemcpy(d_MatrixA, h_MatrixA, width * height * sizeof(int), cudaMemcpyHostToDevice));
+ //   int *d_MatrixA, *d_MatrixB;
+//    SAFE_CALL(cudaMalloc(&d_MatrixA, width * height * sizeof(int)));
+//    SAFE_CALL(cudaMalloc(&d_MatrixB, width * height * sizeof(int)));
+//    SAFE_CALL(cudaMemcpy(d_MatrixA, h_MatrixA, width * height * sizeof(int), cudaMemcpyHostToDevice));
     
     //float *mask = new float[N * N];
     float mask[] = { 0.0030, 0.0133, 0.0219, 0.0133, 0.0030, 0.0133, 0.0596, 0.0983, 0.0596, 0.0133, 0.0219, 0.0983, 0.1621, 0.0983, 0.0219, 0.0133, 0.0596, 0.0983, 0.0596, 0.0133, 0.0030, 0.0133, 0.0219, 0.0133, 0.0030 };
@@ -56,6 +56,18 @@ int main() {
         for (int j = 0; j < height; ++j)
             h_MatrixA[i*width + j] = distribution(generator);
 
+
+    
+
+ //   std::cout<<"Starting computation on DEVICE "<<std::endl;
+
+//    dev_TM.start();
+    //GaussianBlur<<<DIV(N, BLOCK_SIZE), BLOCK_SIZE>>>(d_MatrixA, d_MatrixB, mask, N, height, width);
+
+  //  dev_TM.stop();
+    //dev_time = dev_TM.duration();
+    //CHECK_CUDA_ERROR;
+    host_TM.start();
 
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
@@ -75,13 +87,8 @@ int main() {
         }
     }
 
-    std::cout<<"Starting computation on DEVICE "<<std::endl;
-
-    dev_TM.start();
-    //GaussianBlur<<<DIV(N, BLOCK_SIZE), BLOCK_SIZE>>>(d_MatrixA, d_MatrixB, mask, N, height, width);
-
-    dev_TM.stop();
-    //dev_time = dev_TM.duration();
-    CHECK_CUDA_ERROR;
+    host_TM.stop();
     
+    std::cout << host_TM.duration() << std::endl;
+    cudaDeviceReset();
 }
