@@ -8,11 +8,11 @@ using namespace timer;
 
 #define DIV(a, b)   (((a) + (b) - 1) (b))
 
-#define HEIGHT 4000
-#define WIDTH 2000
+#define HEIGHT 2000
+#define WIDTH 1000
 #define CHANNELS 3
 #define N 5
-#define BLOCK_SIZE 256
+#define BLOCK_SIZE 32 
 
 __global__ void GaussianBlur(const unsigned char* matrix_in, unsigned char* matrix_out, float* mask) {
     int global_id_x = threadIdx.x + blockIdx.x * blockDim.x;
