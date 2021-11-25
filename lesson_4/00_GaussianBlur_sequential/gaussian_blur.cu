@@ -14,7 +14,7 @@ using namespace timer;
 #define N 5
 #define BLOCK_SIZE 256
 
-__global__ void GaussianBlur(const unsigned char* matrix_in, int* matrix_out, float* mask) {
+__global__ void GaussianBlur(const unsigned char* matrix_in, unsigned char* matrix_out, float* mask) {
     int global_id_x = threadIdx.x + blockIdx.x * blockDim.x;
     int global_id_y = threadIdx.y + blockIdx.y * blockDim.y;
 
