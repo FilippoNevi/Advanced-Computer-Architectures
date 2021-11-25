@@ -46,7 +46,8 @@ int main() {
     unsigned char* h_matrix_in = new unsigned char[WIDTH * HEIGHT * CHANNELS];
     unsigned char* h_matrix_out = new unsigned char[WIDTH * HEIGHT * CHANNELS];
     unsigned char* d_matrix_out_tmp = new unsigned char[WIDTH * HEIGHT * CHANNELS];
-    unsigned char *d_matrix_in, *d_matrix_out, *d_mask;
+    unsigned char *d_matrix_in, *d_matrix_out;
+    float* d_mask;
 
     SAFE_CALL(cudaMalloc(&d_matrix_in, WIDTH * HEIGHT * CHANNELS *  sizeof(unsigned char)));
     SAFE_CALL(cudaMalloc(&d_matrix_out, WIDTH * HEIGHT * CHANNELS * sizeof(unsigned char)));

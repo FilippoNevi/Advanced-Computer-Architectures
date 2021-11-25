@@ -28,4 +28,4 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 list(APPEND CUDA_NVCC_FLAGS "-arch=sm_62")
 list(APPEND CUDA_NVCC_FLAGS "-w")
 
-cuda_add_executable(reduce ${PROJECT_SOURCE_DIR}/gaussian_blur.cu)
+cuda_add_executable(filter ${PROJECT_SOURCE_DIR}/gaussian_blur.cu)
