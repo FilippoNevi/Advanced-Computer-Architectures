@@ -53,7 +53,7 @@ int main() {
     SAFE_CALL(cudaMalloc(&d_matrix_out, WIDTH * HEIGHT * CHANNELS * sizeof(unsigned char)));
     SAFE_CALL(cudaMalloc(&d_mask, N * N * sizeof(float)));
     
-    SAFE_CALL(cudaMemcpy(d_matrix_out, h_matrix_in, WIDTH * HEIGHT * CHANNELS * sizeof(unsigned char), cudaMemcpyHostToDevice));
+    SAFE_CALL(cudaMemcpy(d_matrix_in, h_matrix_in, WIDTH * HEIGHT * CHANNELS * sizeof(unsigned char), cudaMemcpyHostToDevice));
     SAFE_CALL(cudaMemcpy(d_mask, mask, N * N * sizeof(float), cudaMemcpyHostToDevice)); 
 
     for (int i = 0; i < WIDTH; ++i)
