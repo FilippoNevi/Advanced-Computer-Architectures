@@ -72,7 +72,7 @@ int main() {
 
     CHECK_CUDA_ERROR;
 
-    SAFE_CALL(cudaMemcpy(h_image_out, d_image_out
+//    SAFE_CALL(cudaMemcpy(h_image_out, d_image_out
     host_TM.start();
 
     for (int y = 0; y < HEIGHT; ++y) {
