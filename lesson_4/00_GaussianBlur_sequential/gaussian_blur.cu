@@ -43,8 +43,8 @@ int main() {
     
     float mask[] = { 0.0030, 0.0133, 0.0219, 0.0133, 0.0030, 0.0133, 0.0596, 0.0983, 0.0596, 0.0133, 0.0219, 0.0983, 0.1621, 0.0983, 0.0219, 0.0133, 0.0596, 0.0983, 0.0596, 0.0133, 0.0030, 0.0133, 0.0219, 0.0133, 0.0030 };
    
-    unsigned char* h_matrix_in = new int[WIDTH * HEIGHT * CHANNELS];
-    unsigned char* h_matrix_out = new int[WIDTH * HEIGHT * CHANNELS];
+    unsigned char* h_matrix_in = new unsigned char[WIDTH * HEIGHT * CHANNELS];
+    unsigned char* h_matrix_out = new unsigned char[WIDTH * HEIGHT * CHANNELS];
 
     unsigned char *d_matrix_in, *d_matrix_out, *d_mask;
 
