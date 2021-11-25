@@ -27,10 +27,10 @@ __global__ void GaussianBlur(const unsigned char* matrix_in, int* matrix_out, fl
                 pixel_value += mask[v*N+u] * matrix_in[(new_y*WIDTH+new_x)*4+channel];
             }
         }
-        matrix_out[(y*WIDTH+x)*4+channel] = (unsigned char)pixel_value;
+        matrix_out[(global_id_y*WIDTH+global_id_x)*4+channel] = (unsigned char)pixel_value;
     }
     // no transparency
-    matrix_out[(y*WIDTH+x)*4+CHANNELS] = (unsigned char)255;
+    matrix_out[(global_id_y*WIDTH+global_id_x)*4+CHANNELS] = (unsigned char)255;
 }
 
 int main() {
@@ -43,16 +43,16 @@ int main() {
     
     float mask[] = { 0.0030, 0.0133, 0.0219, 0.0133, 0.0030, 0.0133, 0.0596, 0.0983, 0.0596, 0.0133, 0.0219, 0.0983, 0.1621, 0.0983, 0.0219, 0.0133, 0.0596, 0.0983, 0.0596, 0.0133, 0.0030, 0.0133, 0.0219, 0.0133, 0.0030 };
    
-    int* h_matrix_in = new int[WIDTH * HEIGHT * CHANNELS];
-    int* h_matrix_out = new int[WIDTH * HEIGHT * CHANNELS];
+    unsigned char* h_matrix_in = new int[WIDTH * HEIGHT * CHANNELS];
+    unsigned char* h_matrix_out = new int[WIDTH * HEIGHT * CHANNELS];
 
-    int *d_matrix_in, *d_matrix_out, *d_mask;
+    unsigned char *d_matrix_in, *d_matrix_out, *d_mask;
 
     SAFE_CALL(cudaMalloc(&d_matrix_in, WIDTH * HEIGHT * CHANNELS *  sizeof(unsigned char)));
     SAFE_CALL(cudaMalloc(&d_matrix_out, WIDTH * HEIGHT * CHANNELS * sizeof(unsigned char)));
-    SAFE_CALL(mudaMalloc(&d_mask, N * N * sizeof(float)));
+    SAFE_CALL(cudaMalloc(&d_mask, N * N * sizeof(float)));
     
-    SAFE_CALL(cudaMemcpy(d_matrix_out, h_Matrix_in, WIDTH * HEIGHT * CHANNELS * sizeof(unsigned char), cudaMemcpyHostToDevice));
+    SAFE_CALL(cudaMemcpy(d_matrix_out, h_matrix_in, WIDTH * HEIGHT * CHANNELS * sizeof(unsigned char), cudaMemcpyHostToDevice));
     SAFE_CALL(cudaMemcpy(d_mask, mask, N * N * sizeof(float), cudaMemcpyHostToDevice)); 
 
     for (int i = 0; i < WIDTH; ++i)
