@@ -6,8 +6,6 @@
 
 using namespace timer;
 
-#define DIV(a, b)   (((a) + (b) - 1) (b))
-
 #define HEIGHT 2000
 #define WIDTH 1000
 #define CHANNELS 3
@@ -54,7 +52,7 @@ int main() {
     SAFE_CALL(cudaMalloc(&d_mask, N * N * sizeof(float)));
     
     SAFE_CALL(cudaMemcpy(d_matrix_in, h_matrix_in, WIDTH * HEIGHT * CHANNELS * sizeof(unsigned char), cudaMemcpyHostToDevice));
-    SAFE_CALL(cudaMemcpy(d_mask, mask, N * N * sizeof(float), cudaMemcpyHostToDevice)); 
+    SAFE_CALL(cudaMemcpy(d_mask, &mask, N * N * sizeof(float), cudaMemcpyHostToDevice)); 
 
     for (int i = 0; i < WIDTH; ++i)
     for (int j = 0; j < HEIGHT; ++j)
