@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++11  -rdynamic CMakeFiles/PrefixScan.dir/src/Timer.cpp.o CMakeFiles/PrefixScan.dir/PrefixScan_generated_PrefixScan.cu.o CMakeFiles/PrefixScan.dir/src/PrefixScan_generated_Timer.cu.o  -o PrefixScan /usr/local/cuda-10.2/lib64/libcudart_static.a -lpthread -ldl -lrt 

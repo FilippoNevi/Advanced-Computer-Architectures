@@ -15,7 +15,7 @@ void sequentialMatrixMatrixMul(int** A, int** B, int** C) {
 
 void openmpMatrixMatrixMul(int** A, int** B, int** C) {
 	int row, col, sum, k;
-	#pragma omp parallel for private(row, col, sum)
+	#pragma omp parallel for private(row, col, sum, k)
 	for (row = 0; row < ROWS; ++row) {
  		for (col = 0; col < COLS; ++col) {
 			sum = 0;

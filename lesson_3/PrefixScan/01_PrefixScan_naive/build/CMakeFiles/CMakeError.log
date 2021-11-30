@@ -1,0 +1,56 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/nvidia/ACA/Filippo_Nevi/Advanced-Computer-Architectures/lesson_3/PrefixScan/01_PrefixScan_naive/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_3d00e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_3d00e.dir/build.make CMakeFiles/cmTC_3d00e.dir/build
+make[1]: Entering directory '/home/nvidia/ACA/Filippo_Nevi/Advanced-Computer-Architectures/lesson_3/PrefixScan/01_PrefixScan_naive/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_3d00e.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTC_3d00e.dir/CheckSymbolExists.cxx.o -c /home/nvidia/ACA/Filippo_Nevi/Advanced-Computer-Architectures/lesson_3/PrefixScan/01_PrefixScan_naive/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+Linking CXX executable cmTC_3d00e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3d00e.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_3d00e.dir/CheckSymbolExists.cxx.o  -o cmTC_3d00e 
+CMakeFiles/cmTC_3d00e.dir/CheckSymbolExists.cxx.o: In function `main':
+CheckSymbolExists.cxx:(.text+0x14): undefined reference to `pthread_create'
+CheckSymbolExists.cxx:(.text+0x18): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_3d00e.dir/build.make:97: recipe for target 'cmTC_3d00e' failed
+make[1]: *** [cmTC_3d00e] Error 1
+make[1]: Leaving directory '/home/nvidia/ACA/Filippo_Nevi/Advanced-Computer-Architectures/lesson_3/PrefixScan/01_PrefixScan_naive/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_3d00e/fast' failed
+make: *** [cmTC_3d00e/fast] Error 2
+
+File /home/nvidia/ACA/Filippo_Nevi/Advanced-Computer-Architectures/lesson_3/PrefixScan/01_PrefixScan_naive/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/nvidia/ACA/Filippo_Nevi/Advanced-Computer-Architectures/lesson_3/PrefixScan/01_PrefixScan_naive/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ba018/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ba018.dir/build.make CMakeFiles/cmTC_ba018.dir/build
+make[1]: Entering directory '/home/nvidia/ACA/Filippo_Nevi/Advanced-Computer-Architectures/lesson_3/PrefixScan/01_PrefixScan_naive/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_ba018.dir/CheckFunctionExists.cxx.o
+/usr/bin/c++    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_ba018.dir/CheckFunctionExists.cxx.o -c /home/nvidia/ACA/Filippo_Nevi/Advanced-Computer-Architectures/lesson_3/PrefixScan/01_PrefixScan_naive/build/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx
+Linking CXX executable cmTC_ba018
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ba018.dir/link.txt --verbose=1
+/usr/bin/c++   -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_ba018.dir/CheckFunctionExists.cxx.o  -o cmTC_ba018 -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_ba018.dir/build.make:97: recipe for target 'cmTC_ba018' failed
+make[1]: *** [cmTC_ba018] Error 1
+make[1]: Leaving directory '/home/nvidia/ACA/Filippo_Nevi/Advanced-Computer-Architectures/lesson_3/PrefixScan/01_PrefixScan_naive/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_ba018/fast' failed
+make: *** [cmTC_ba018/fast] Error 2
+
+

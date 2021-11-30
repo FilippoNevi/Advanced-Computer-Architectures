@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/Timer.hpp
+string
+-
+chrono
+-
+iostream
+-
+fstream
+-
+fUtil.hpp
+../include/fUtil.hpp
+ctime
+-
+sys/times.h
+-
+unistd.h
+-
+Timer.i.hpp
+../include/Timer.i.hpp
+
+../include/Timer.i.hpp
+stdexcept
+-
+iostream
+-
+iomanip
+-
+chrono
+-
+ratio
+-
+
+/home/nvidia/ACA/Filippo_Nevi/Advanced-Computer-Architectures/lesson_3/PrefixScan/01_PrefixScan_naive/src/Timer.cpp
+Timer.hpp
+/home/nvidia/ACA/Filippo_Nevi/Advanced-Computer-Architectures/lesson_3/PrefixScan/01_PrefixScan_naive/src/Timer.hpp
+
