@@ -18,6 +18,10 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 		__syncthreads();
 		offset *= 2;
 	}
+	__syncthreads();
+	if (blockIdx.x > 0)
+		VectorIN[globalIndex] += VectorIN[(blockIdx.x - 1) * blockDim.x];
+	__syncthreads();
 }
 
 void printArray(int* Array, int N, const char str[] = "") {
@@ -37,6 +41,7 @@ void printArray(int* Array, int start, int end, const char str[] = "") {
 #define DIV(a,b)	(((a) + (b) - 1) / (b))
 
 int main() {
+
 	const int blockDim = BLOCK_SIZE;
 	const int N = BLOCK_SIZE * 131072;
 	
@@ -88,11 +93,7 @@ int main() {
     host_TM.stop();
 
 
-		printArray(prefixScan, 10);
-		printArray(host_result, 10);
-
-
-	if (!std::equal(host_result, host_result + blockDim - 1, prefixScan + 1)) {
+	if (!std::equal(host_result, host_result + blockDim - 1, prefixScan)) {
 		std::cerr << " Error! :  prefixScan" << std::endl << std::endl;
 		cudaDeviceReset();
 		std::exit(EXIT_FAILURE);

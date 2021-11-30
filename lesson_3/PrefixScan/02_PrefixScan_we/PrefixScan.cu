@@ -8,14 +8,14 @@ using namespace timer_cuda;
 
 const int BLOCK_SIZE = 512;
 
-__global__ void PrefixScan(int* VectorIN, int N) {
+__global__ void PrefixScan(int* VectorIN, int N) /*{
 	int step, limit;
 	int valueRight, valueLeft;
-
+	int globalIndex = blockIdx.x * blockDim.x + threadIdx.x;
 	step = 1;
-	for (limit = blockDim.x / 2; limit > 0; limit /= 2) {
-		if (threadIdx.x < limit) {
-			valueRight = (threadIdx.x + 1) * (step * 2) - 1;
+	for (limit = (blockIdx.x * blockDim.x) / 2; limit > 0; limit /= 2) {
+		if (globalIndex < limit) {
+			valueRight = (globalIndex + 1) * (step * 2) - 1;
 			valueLeft = valueRight - step;
 			VectorIN[valueRight] = VectorIN[valueRight] + VectorIN[valueLeft];
 		}
@@ -23,14 +23,14 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 		__syncthreads();
 	}
 	
-	if (threadIdx.x == 0)
-		VectorIN[blockDim.x - 1] = 0;
+	if (globalIndex == 0)
+		VectorIN[(blockIdx.x * blockDim.x) - 1] = 0;
 	__syncthreads();
 
 	limit = 1;	
-	for (step = blockDim.x / 2; step > 0; step /= 2) {
-		if (threadIdx.x < limit) {
-			valueRight = (threadIdx.x * 2 + 1) * step - 1;
+	for (step = (blockIdx.x * blockDim.x) / 2; step > 0; step /= 2) {
+		if (globalIndex < limit) {
+			valueRight = (globalIndex * 2 + 1) * step - 1;
 			valueLeft = valueRight - step;
 			int tmp = VectorIN[valueLeft];
 			VectorIN[valueLeft] = VectorIN[valueRight];
@@ -38,6 +38,37 @@ __global__ void PrefixScan(int* VectorIN, int N) {
 		}
 		limit *= 2;
 		__syncthreads();
+	}
+}
+*/
+{
+	int globalIndex = (blockIdx.x * blockDim.x) + threadIdx.x;
+	int step = 1;
+	int valueRight, valueLeft;
+
+	for (int level = 1; level < N; level *= 2) {
+		if (globalIndex % (step * 2) == 0) {
+			valueRight = (globalIndex + 1) * (step * 2) -1;
+			valueLeft = valueRight - step;
+			VectorIN[valueRight] = VectorIN[valueRight] + VectorIN[valueLeft];
+		}
+		step *= 2;
+	}
+
+	VectorIN[N-1] = 0;
+	
+	int k = 1;
+	step = 1;
+
+	for(int level = (N / 2); level >= 1; level /= 2, k *= 2) {
+		if (globalIndex < k) {
+			valueLeft = (globalIndex * 2 + 1) * step - 1;
+			valueRight = valueLeft + step;
+			int tmp = VectorIN[valueLeft];
+			VectorIN[valueLeft] = VectorIN[valueRight];
+			VectorIN[valueRight] = tmp + VectorIN[valueRight];
+		}
+		step *= 2;
 	}
 }
 
