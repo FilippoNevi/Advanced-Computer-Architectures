@@ -22,10 +22,9 @@ void key_scheduling_alg(unsigned char*       S,
 void pseudo_random_gen(unsigned char* S,
                        unsigned char* stream,
                        int            input_length) {
-	int i, j;
     for (int x = 0; x < input_length; ++x) {
-        i = (i + 1) % 256;
-        j = (j + S[i]) % 256;
+        int i = (i + 1) % 256;
+        int j = (j + S[i]) % 256;
         std::swap(S[i], S[j]);
         stream[x] = S[(S[i] + S[j]) % 256];
     }
@@ -34,12 +33,11 @@ void pseudo_random_gen(unsigned char* S,
 bool chech_hex(const unsigned char* cipher_text,
               const unsigned char* stream,
               const int            key_length) {
-	bool flag = true;
     for (int i = 0; i < key_length; ++i) {
         if (cipher_text[i] != stream[i])
-            flag = false;
+            return false;
     }
-    return flag;
+    return true;
 }
 
 void print_hex(const unsigned char* text, const int length, const char* str) {
@@ -53,7 +51,8 @@ const int bitLength  = 24;
 const int key_length = bitLength / 8;
 
 int main() {
-	using namespace timer;
+    using namespace timer;
+
     unsigned char S[256],
     stream[key_length],
     key[key_length]         = {'K','e','y'},
@@ -64,8 +63,13 @@ int main() {
     print_hex(cipher_text, key_length, "cipher_text:");
     print_hex(key, key_length, "Key:");
 
-    // -------------------------------------------------------------------------
 
+    //sequential//
+    // -------------------------------------------------------------------------
+    Timer<HOST> TM_seq;
+    TM_seq.start();
+
+    std::cout << "Sequential Execution\n";
     key_scheduling_alg(S, key, key_length);
     pseudo_random_gen(S, stream, key_length);
 
@@ -76,29 +80,25 @@ int main() {
 
     print_hex(stream, key_length, "XOR:");
     if (chech_hex(cipher_text, stream, key_length))
-        std::cout << "\n\ncheck ok!\n\n";
-    std::cout << "\nCracking..." << std::endl;
+        std::cout << "check ok!\n";
+    std::cout << "Cracking..." << std::endl;
 
     // --------------------- CRACKING ------------------------------------------
 
     std::fill(key, key + key_length, 0);
 
-	Timer<HOST> TM;
-    TM.start();
-
-	int k, i;
-	bool found = false;
-	#pragma omp parallel for
-    for (k = 0; k < (1<<24); ++k) {
+    bool find = false;
+    for (int k = 0; k < (1<<24); ++k) {
         key_scheduling_alg(S, key, key_length);
         pseudo_random_gen(S, stream, key_length);
 
-        for (i = 0; i < key_length; ++i)
+        for (int i = 0; i < key_length; ++i)
             stream[i] = stream[i] ^ Plaintext[i];        // XOR
 
         if (chech_hex(cipher_text, stream, key_length)) {
-            std::cout << " <> CORRECT\n\n";
-			found = true;
+            std::cout << " <> CORRECT\n";
+            find=true;
+            break;
         }
         int next = 0;
         while (key[next] == 255) {
@@ -106,14 +106,72 @@ int main() {
             ++next;
         }
         ++key[next];
-
-		if(found)
-			k = (1<<24);
     }
-    
-	if(!found)
-		std::cout << "\nERROR!! key not found\n\n";
+    if(!find){
+        std::cout << "ERROR!! key not found\n";
+    }
+    TM_seq.stop();
+    TM_seq.print("Sequential Time");
+    //end sequential
 
-	TM.stop();
-    TM.print("Parallel Search");
+    Timer<HOST> TM_par;
+    
+    
+    //start parallel
+    
+    std::cout << "\nParallel Execution\n";
+    TM_par.start();
+    
+    key_scheduling_alg(S, key, key_length);
+    pseudo_random_gen(S, stream, key_length);
+
+    print_hex(stream, key_length, "PRGA Stream:");
+
+    for (int i = 0; i < key_length; ++i)
+        stream[i] = stream[i] ^ Plaintext[i];        // XOR
+
+    print_hex(stream, key_length, "XOR:");
+    if (chech_hex(cipher_text, stream, key_length))
+        std::cout << "check ok!\n";
+    std::cout << "Cracking..." << std::endl;
+
+    // --------------------- CRACKING ------------------------------------------
+
+
+    std::fill(key, key + key_length, 0);
+
+    find = false;
+
+    #pragma omp parallel for 
+    for (int k = 0; k < (1<<24); ++k) {
+        if(!find){
+            key_scheduling_alg(S, key, key_length);
+            pseudo_random_gen(S, stream, key_length);
+            
+            for (int i = 0; i < key_length; ++i)
+                stream[i] = stream[i] ^ Plaintext[i];        // XOR
+
+            if (chech_hex(cipher_text, stream, key_length)) {
+                std::cout << " <> CORRECT\n";
+                find=true;
+            }
+            int next = 0;
+            while (key[next] == 255) {
+                key[next] = 0;
+                ++next;
+            }
+            ++key[next];
+        }
+    }
+
+    if(!find){
+        std::cout << "ERROR!! key not found\n";
+    }
+    TM_par.stop();
+    TM_par.print("Parallel Time");
+    //end parallel
+
+    std::cout << TM_seq.duration() << ";" << TM_par.duration() << ";" << TM_seq.duration() / TM_par.duration() << std::endl;
+
+    return 0;
 }
