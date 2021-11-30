@@ -10,9 +10,11 @@
 void key_scheduling_alg(unsigned char*       S,
                         const unsigned char* key,
                         const int            key_length) {
+	#pragma omp parallel for
     for (int i = 0; i < 256; ++i)
         S[i] = i;
     int j = 0;
+	#pragma omp parallel for private(j)
     for (int i = 0; i < 256; ++i) {
         j = (j + S[i] + key[i % key_length]) % 256;
         std::swap(S[i], S[j]);
@@ -22,9 +24,11 @@ void key_scheduling_alg(unsigned char*       S,
 void pseudo_random_gen(unsigned char* S,
                        unsigned char* stream,
                        int            input_length) {
+	int i, j;
+	#pragma omp parallel for private(i, j)
     for (int x = 0; x < input_length; ++x) {
-        int i = (i + 1) % 256;
-        int j = (j + S[i]) % 256;
+        i = (i + 1) % 256;
+        j = (j + S[i]) % 256;
         std::swap(S[i], S[j]);
         stream[x] = S[(S[i] + S[j]) % 256];
     }
@@ -33,15 +37,18 @@ void pseudo_random_gen(unsigned char* S,
 bool chech_hex(const unsigned char* cipher_text,
               const unsigned char* stream,
               const int            key_length) {
+	bool flag = true;
+	#pragma omp parallel for
     for (int i = 0; i < key_length; ++i) {
         if (cipher_text[i] != stream[i])
-            return false;
+            flag = false;
     }
-    return true;
+    return flag;
 }
 
 void print_hex(const unsigned char* text, const int length, const char* str) {
     std::cout << std::endl << std::left << std::setw(15) << str;
+	#pragma omp parallel for
     for (int i = 0; i < length; ++i)
         std::cout << std::hex << std::uppercase << (int) text[i] << ' ';
     std::cout <<  std::dec << std::endl;
@@ -69,6 +76,7 @@ int main() {
 
     print_hex(stream, key_length, "PRGA Stream:");
 
+	#pragma omp parallel for ordered
     for (int i = 0; i < key_length; ++i)
         stream[i] = stream[i] ^ Plaintext[i];        // XOR
 
@@ -84,28 +92,34 @@ int main() {
 	Timer<HOST> TM;
     TM.start();
 
-    for (int k = 0; k < (1<<24); ++k) {
+	int k, i;
+	bool found = false;
+	#pragma omp parallel for private(k, i) shared(key)
+    for (k = 0; k < (1<<24); ++k) {
         key_scheduling_alg(S, key, key_length);
         pseudo_random_gen(S, stream, key_length);
 
-        for (int i = 0; i < key_length; ++i)
+        for (i = 0; i < key_length; ++i)
             stream[i] = stream[i] ^ Plaintext[i];        // XOR
 
         if (chech_hex(cipher_text, stream, key_length)) {
             std::cout << " <> CORRECT\n\n";
-			TM.stop();
-    		TM.print("Sequential Search");
-            return 0;
+			found = true;
         }
         int next = 0;
-        while (key[next] == 255) {
+        while (key[next] == 255 && !found) {
             key[next] = 0;
             ++next;
         }
         ++key[next];
+
+		if(found)
+			k = (1<<24);
     }
-    std::cout << "\nERROR!! key not found\n\n";
+    
+	if(!found)
+		std::cout << "\nERROR!! key not found\n\n";
 
 	TM.stop();
-    TM.print("Sequential Search");
+    TM.print("Parallel Search");
 }
