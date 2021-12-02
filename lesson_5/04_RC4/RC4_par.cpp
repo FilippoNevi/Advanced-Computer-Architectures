@@ -88,7 +88,7 @@ int main() {
 
 	int k, i;
 	bool found = false;
-	#pragma omp parallel shared(found) private(i, k)
+	//#pragma omp parallel shared(found) private(i, k)
     for (k = 0; k < (1<<24) && !found; ++k) {
         key_scheduling_alg(S, key, key_length);
         pseudo_random_gen(S, stream, key_length);
@@ -98,16 +98,18 @@ int main() {
 
         if (chech_hex(cipher_text, stream, key_length)) {
             std::cout << " <> CORRECT\n\n";
-			found = true;
+            found = true;
         }
-        int next = 0;
-        while (key[next] == 255) {
-            key[next] = 0;
-            ++next;
+        if(!found) {
+            int next = 0;
+            while (key[next] == 255) {
+                key[next] = 0;
+                ++next;
+            }
+            ++key[next];
         }
-        ++key[next];
     }
-    
+        
 	if(!found)
 		std::cout << "\nERROR!! key not found\n\n";
 
