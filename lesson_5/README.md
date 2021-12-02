@@ -27,12 +27,10 @@ CPU time   | CPU time* | Speedup  | Device             | Mode   |Author
 
 ## 04. RC4 Cipher
 
-<img src="https://github.com/PARCO-LAB/Advanced-Computer-Architectures/blob/main/figures/l5_04.jpg" width="500" height=auto> 
-
 ### Performance reference table (N = 256):
 
 CPU time   | CPU time* | Speedup  | Device             | Mode   |Author
 -----------| --------  | -------- | ------------------ | ----   |------
-31282 ms   | 2618 ms   | 15x      | Intel i5-4590      | OpenMP | Filippo Nevi
+31282 ms   | 2618 ms   | 12x      | Intel i5-4590      | OpenMP | Filippo Nevi
 
 Note: for the parallel version of RC4, the program sometimes cannot crack the key, and when it cracks it, the execution time changes drastically between one instance and another. The highest time I've recorded in five attempts was 4424 ms, while the least time was 698 ms.
