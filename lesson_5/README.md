@@ -25,12 +25,14 @@ CPU time   | CPU time* | Speedup  | Device             | Mode   |Author
 -----------| --------  | -------- | ------------------ | ----   |------
 120 ms     | 53 ms     | 2.2x     | Nvidia Jetson TX2  | OpenMP | Filippo Nevi 
 
-## 04. RC4 Chiper
-
-<img src="https://github.com/PARCO-LAB/Advanced-Computer-Architectures/blob/main/figures/l5_04.jpg" width="500" height=auto> 
+## 04. RC4 Cipher
 
 ### Performance reference table (N = 256):
 
+<img src="https://github.com/PARCO-LAB/Advanced-Computer-Architectures/blob/main/figures/l5_04.jpg" width="500" height=auto> 
+
 CPU time   | CPU time* | Speedup  | Device             | Mode   |Author
 -----------| --------  | -------- | ------------------ | ----   |------
-29705 ms   | 1943 ms   | 15x      | Intel i5-7400      | OpenMP | Filippo Nevi
+2262 ms    | 2618 ms   | 0.9x     | Intel i5-4590      | OpenMP | Filippo Nevi
+
+Note: for the parallel version of RC4, the program sometimes cannot crack the key, and when it cracks it, the execution time changes drastically between one instance and another. The highest time I've recorded in five attempts was 4424 ms, while the least time was 698 ms.
