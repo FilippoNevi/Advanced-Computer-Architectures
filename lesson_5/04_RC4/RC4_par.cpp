@@ -88,8 +88,8 @@ int main() {
 
 	int k, i;
 	bool found = false;
-	#pragma omp parallel shared(found) private(stream, S)
-    for (k = 0; k < (1<<24) && !found; ++k) {
+	#pragma omp parallel for shared(found) private(stream, S)
+    for (k = 0; k < (1<<24); ++k) {
         if(!found) {
             key_scheduling_alg(S, key, key_length);
             pseudo_random_gen(S, stream, key_length);
