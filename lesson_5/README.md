@@ -33,6 +33,6 @@ CPU time   | CPU time* | Speedup  | Device             | Mode   |Author
 
 CPU time   | CPU time* | Speedup  | Device             | Mode   |Author
 -----------| --------  | -------- | ------------------ | ----   |------
-31282 ms   | 2618 ms   | 12x      | Intel i5-4590      | OpenMP | Filippo Nevi
+2262 ms   | 2618 ms   | 12x      | Intel i5-4590      | OpenMP | Filippo Nevi
 
 Note: for the parallel version of RC4, the program sometimes cannot crack the key, and when it cracks it, the execution time changes drastically between one instance and another. The highest time I've recorded in five attempts was 4424 ms, while the least time was 698 ms.
