@@ -29,6 +29,8 @@ CPU time   | CPU time* | Speedup  | Device             | Mode   |Author
 
 ### Performance reference table (N = 256):
 
+<img src="https://github.com/PARCO-LAB/Advanced-Computer-Architectures/blob/main/figures/l5_04.jpg" width="500" height=auto> 
+
 CPU time   | CPU time* | Speedup  | Device             | Mode   |Author
 -----------| --------  | -------- | ------------------ | ----   |------
 31282 ms   | 2618 ms   | 12x      | Intel i5-4590      | OpenMP | Filippo Nevi
