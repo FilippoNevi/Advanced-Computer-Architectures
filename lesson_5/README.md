@@ -36,4 +36,4 @@ CPU time   | CPU time* | Speedup  | Device             | Mode  |Author
 
 CPU time   | CPU time* | Speedup  | Device             | Mode  |Author
 -----------| -------- | -------- | ------------------ | ----  |------
-72146 ms   | 63231 ms    | 1.13x     | Nvidia Jetson TX2  | OpenMP | -
+29705 ms   | 26834 ms    | x     |   | OpenMP | -
