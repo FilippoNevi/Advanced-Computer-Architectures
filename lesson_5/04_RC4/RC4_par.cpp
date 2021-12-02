@@ -90,17 +90,17 @@ int main() {
 	bool found = false;
 	#pragma omp parallel shared(found) private(stream, S)
     for (k = 0; k < (1<<24) && !found; ++k) {
-        key_scheduling_alg(S, key, key_length);
-        pseudo_random_gen(S, stream, key_length);
-
-        for (i = 0; i < key_length; ++i)
-            stream[i] = stream[i] ^ Plaintext[i];        // XOR
-
-        if (chech_hex(cipher_text, stream, key_length)) {
-            std::cout << " <> CORRECT\n\n";
-            found = true;
-        }
         if(!found) {
+            key_scheduling_alg(S, key, key_length);
+            pseudo_random_gen(S, stream, key_length);
+
+            for (i = 0; i < key_length; ++i)
+                stream[i] = stream[i] ^ Plaintext[i];        // XOR
+
+            if (chech_hex(cipher_text, stream, key_length)) {
+                std::cout << " <> CORRECT\n\n";
+                found = true;
+            }
             int next = 0;
             while (key[next] == 255) {
                 key[next] = 0;
