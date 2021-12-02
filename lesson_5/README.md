@@ -27,6 +27,8 @@ CPU time   | CPU time* | Speedup  | Device             | Mode   |Author
 
 ## 04. RC4 Cipher
 
+<img src="https://github.com/PARCO-LAB/Advanced-Computer-Architectures/blob/main/figures/l5_04.jpg" width="500" height=auto>
+
 ### Performance reference table (N = 256):
 
 CPU time   | CPU time* | Speedup  | Device             | Mode   |Author
