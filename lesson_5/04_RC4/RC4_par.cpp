@@ -88,7 +88,7 @@ int main() {
 
 	int k, i, next;
 	bool found = false;
-	#pragma omp parallel for shared(found) private(stream, S, k, i)
+	#pragma omp parallel for shared(found) private(stream, S, k, i, next)
     for (k = 0; k < (1<<24); ++k) {
         if(!found) {
             key_scheduling_alg(S, key, key_length);
