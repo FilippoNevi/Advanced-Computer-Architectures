@@ -86,7 +86,7 @@ int main() {
 	Timer<HOST> TM;
     TM.start();
 
-	int k, i;
+	int k, i, next;
 	bool found = false;
 	#pragma omp parallel for shared(found) private(stream, S, k, i)
     for (k = 0; k < (1<<24); ++k) {
@@ -101,7 +101,7 @@ int main() {
                 std::cout << " <> CORRECT\n\n";
                 found = true;
             }
-            int next = 0;
+            next = 0;
             while (key[next] == 255) {
                 key[next] = 0;
                 ++next;
