@@ -4,9 +4,9 @@
 
 ### Performance reference table (N = 44):
 
-CPU time   | CPU* time | Speedup  | Device             | Mode  |Author
------------| -------- | -------- | ------------------ | ----  |------
-15567 ms   | 7753 ms    | 2x     | Nvidia Jetson TX2  | OpenMP (-O0) | -
+CPU time   | CPU* time | Speedup  | Device             | Mode         | Author
+-----------| --------  | -------- | ------------------ | -----------  |------
+821 ms     | 515 ms    | 1.6x     | Intel i5-7400      | OpenMP (-O0) | Filippo Nevi
 
 ## 01. QuickSort
 
