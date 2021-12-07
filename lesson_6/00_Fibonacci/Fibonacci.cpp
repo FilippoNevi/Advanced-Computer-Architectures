@@ -33,7 +33,17 @@ int main() {
     omp_set_dynamic(0);
     int value = 6;
 
+    Timer<HOST> TM;
+
+    TM.start();
     long long int result = fibonacci(value, 1);
+    TM.stop();
+    TM.print("Sequential: ");
+
+    TM.start();
+    long long int result_par = fibonacci_par(value, 1);
+    TM.stop();
+    TM.print("Parallel: ");
 
     std::cout << "\nresult: " << result << "\n" << std::endl;
 }
