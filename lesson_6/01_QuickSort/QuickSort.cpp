@@ -80,5 +80,5 @@ int main() {
     TM.stop();
 
     print_array(input, N, "Sorted:");
-    TM.print("Parallel: );
+    TM.print("Parallel: ");
 }
