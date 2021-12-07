@@ -18,11 +18,11 @@ long long int fibonacci_par(long long int value, int level) {
         return 1;
 
     long long int fib_left, fib_right;
-    #pragma omp parallel sections
+    #pragma omp parallel
     {
-        #pragma omp section
+        #pragma omp task 
         { fib_left  = fibonacci(value - 1, level + 1); }
-        #pragma omp section 
+        #pragma omp task
         { fib_right = fibonacci(value - 2, level + 1); }
     }
 
