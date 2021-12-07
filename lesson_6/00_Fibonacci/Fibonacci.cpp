@@ -30,6 +30,7 @@ long long int fibonacci_par(long long int value, int level) {
 }
 
 int main() {
+    using namespace timer;
     //  ------------------------- TEST FIBONACCI ----------------------
     omp_set_dynamic(0);
     int value = 6;
