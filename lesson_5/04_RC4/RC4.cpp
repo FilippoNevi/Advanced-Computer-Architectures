@@ -93,6 +93,8 @@ int main() {
 
         if (chech_hex(cipher_text, stream, key_length)) {
             std::cout << " <> CORRECT\n\n";
+           	TM.stop();
+            TM.print("Sequential Search");
             return 0;
         }
         int next = 0;
