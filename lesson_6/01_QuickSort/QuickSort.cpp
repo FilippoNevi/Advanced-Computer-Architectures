@@ -64,21 +64,21 @@ int main() {
         input[i] = distribution(generator);
     Timer<HOST> TM;
 
-    print_array(input, N, "\nInput:");
+    //print_array(input, N, "\nInput:");
     
     TM.start();
     quick_sort(input, 0, N - 1);
     TM.stop();
 
-    print_array(input, N, "Sorted:");
+    //print_array(input, N, "Sorted:");
     TM.print("Sequential: ");
 
-    print_array(input, N, "\nInput:");
+    //print_array(input, N, "\nInput:");
 
     TM.start();
     quick_sort_par(input, 0, N - 1);
     TM.stop();
 
-    print_array(input, N, "Sorted:");
+    //print_array(input, N, "Sorted:");
     TM.print("Parallel: ");
 }
