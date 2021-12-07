@@ -27,6 +27,19 @@ void quick_sort(int array[], const int start, const int end) {
     }
 }
 
+void quick_sort(int array[], const int start, const int end) {
+    if(start < end) {
+        int pivot = partition(array, start, end);
+        #pragma omp parallel sections
+        {
+            #pragma omp section
+            { quick_sort(array, start, pivot - 1); }
+            #pragma omp section
+            { quick_sort(array, pivot + 1, end); }
+        }
+    }
+}
+
 template<typename T>
 void print_array(T* array, int size, const char* str) {
     std::cout << str << "\n";
@@ -37,6 +50,8 @@ void print_array(T* array, int size, const char* str) {
 
 
 int main() {
+    using namespace timer;
+
     const int N = 100;
 
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
