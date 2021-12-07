@@ -33,7 +33,7 @@ int main() {
     using namespace timer;
     //  ------------------------- TEST FIBONACCI ----------------------
     omp_set_dynamic(0);
-    int value = 16;
+    int value = 1000;
 
     Timer<HOST> TM;
 
