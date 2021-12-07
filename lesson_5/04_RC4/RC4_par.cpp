@@ -83,12 +83,12 @@ int main() {
 
     std::fill(key, key + key_length, 0);
 
-	Timer<HOST> TM;
+    Timer<HOST> TM;
     TM.start();
 
-	int k, i, next;
-	bool found = false;
-	#pragma omp parallel for shared(found) private(stream, S, k, i, next)
+    int k, i, next;
+    bool found = false;
+    #pragma omp parallel for shared(found) private(stream, S, k, i, next)
     for (k = 0; k < (1<<24); ++k) {
         if(!found) {
             key_scheduling_alg(S, key, key_length);
@@ -110,9 +110,9 @@ int main() {
         }
     }
         
-	if(!found)
-		std::cout << "\nERROR!! key not found\n\n";
+    if(!found)
+        std::cout << "\nERROR!! key not found\n\n";
 
-	TM.stop();
+    TM.stop();
     TM.print("Parallel Search");
 }
