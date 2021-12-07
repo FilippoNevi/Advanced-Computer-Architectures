@@ -33,10 +33,16 @@ void quick_sort_par(int array[], const int start, const int end) {
         int pivot = partition(array, start, end);
         #pragma omp parallel sections
         {
-            #pragma omp section private(start, pivot)
-            { quick_sort(array, start, pivot - 1); }
-            #pragma omp section private(pivot, end)
-            { quick_sort(array, pivot + 1, end); }
+            #pragma omp section
+            { 
+                #pragma omp private(start, pivot)
+                quick_sort(array, start, pivot - 1);
+            }
+            #pragma omp section
+            {
+                #pragma omp private(pivot, end)
+                quick_sort(array, pivot + 1, end); 
+            }
         }
     }
 }
@@ -64,21 +70,15 @@ int main() {
         input[i] = distribution(generator);
     Timer<HOST> TM;
 
-    //print_array(input, N, "\nInput:");
-    
     TM.start();
     quick_sort(input, 0, N - 1);
     TM.stop();
 
-    //print_array(input, N, "Sorted:");
     TM.print("Sequential: ");
-
-    //print_array(input, N, "\nInput:");
 
     TM.start();
     quick_sort_par(input, 0, N - 1);
     TM.stop();
 
-    //print_array(input, N, "Sorted:");
     TM.print("Parallel: ");
 }
