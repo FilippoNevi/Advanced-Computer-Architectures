@@ -1,5 +1,6 @@
 #include <iostream>
 #include <omp.h>
+#include "Timer.hpp"
 
 long long int fibonacci(long long int value, int level) {
     if (value <= 1)
