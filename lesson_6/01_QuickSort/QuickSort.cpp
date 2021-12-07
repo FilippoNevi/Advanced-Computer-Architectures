@@ -33,9 +33,9 @@ void quick_sort_par(int array[], const int start, const int end) {
         int pivot = partition(array, start, end);
         #pragma omp parallel sections
         {
-            #pragma omp section
+            #pragma omp section private(start, pivot)
             { quick_sort(array, start, pivot - 1); }
-            #pragma omp section
+            #pragma omp section private(pivot, end)
             { quick_sort(array, pivot + 1, end); }
         }
     }

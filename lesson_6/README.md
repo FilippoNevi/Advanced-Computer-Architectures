@@ -6,7 +6,7 @@
 
 CPU time   | CPU* time | Speedup  | Device             | Mode         | Author
 -----------| --------  | -------- | ------------------ | -----------  |------
-821 ms     | 515 ms    | 1.6x     | Intel i5-7400      | OpenMP (-O0) | Filippo Nevi
+6039 ms    | 3758 ms   | 1.6x     | Intel i5-7400      | OpenMP (-O0) | Filippo Nevi
 
 ## 01. QuickSort
 
