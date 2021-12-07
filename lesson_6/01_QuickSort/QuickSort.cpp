@@ -53,7 +53,7 @@ void print_array(T* array, int size, const char* str) {
 int main() {
     using namespace timer;
 
-    const int N = 100;
+    const int N = 1 << 20;
 
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine generator (seed);
