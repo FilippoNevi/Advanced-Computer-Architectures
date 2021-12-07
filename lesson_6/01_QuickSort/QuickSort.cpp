@@ -3,6 +3,7 @@
 #include <iostream>
 #include <random>
 #include <omp.h>
+#include "Timer.hpp"
 
 // ---------- DO NOT MODIFY ----------------------------------------------------
 int partition(int array[], const int start, const int end) {
@@ -27,7 +28,7 @@ void quick_sort(int array[], const int start, const int end) {
     }
 }
 
-void quick_sort(int array[], const int start, const int end) {
+void quick_sort_par(int array[], const int start, const int end) {
     if(start < end) {
         int pivot = partition(array, start, end);
         #pragma omp parallel sections
@@ -61,10 +62,23 @@ int main() {
     int* input = new int[N];
     for (int i = 0; i < N; ++i)
         input[i] = distribution(generator);
+    Timer<HOST> TM;
+
+    print_array(input, N, "\nInput:");
+    
+    TM.start();
+    quick_sort(input, 0, N - 1);
+    TM.stop();
+
+    print_array(input, N, "Sorted:");
+    TM.print("Sequential: ");
 
     print_array(input, N, "\nInput:");
 
-    quick_sort(input, 0, N - 1);
+    TM.start();
+    quick_sort_par(input, 0, N - 1);
+    TM.stop();
 
     print_array(input, N, "Sorted:");
+    TM.print("Parallel: );
 }
