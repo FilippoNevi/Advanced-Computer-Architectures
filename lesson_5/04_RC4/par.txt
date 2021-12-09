@@ -1,0 +1,106 @@
+
+Plaintext:     6A 6A 6A 
+
+cipher_text:   B C7 85 
+
+Key:           4B 65 79 
+
+PRGA Stream:   BD FD 5B 
+
+XOR:           D7 97 31 
+
+Cracking...
+
+ERROR!! key not found
+
+Parallel Search  591645.1 ms
+
+Plaintext:     6A 6A 6A 
+
+cipher_text:   B C7 85 
+
+Key:           4B 65 79 
+
+PRGA Stream:   BD FD 5B 
+
+XOR:           D7 97 31 
+
+Cracking...
+ <> CORRECT
+
+Parallel Search  370544.3 ms
+
+Plaintext:     6A 6A 6A 
+
+cipher_text:   B C7 85 
+
+Key:           4B 65 79 
+
+PRGA Stream:   BD FD 5B 
+
+XOR:           D7 97 31 
+
+Cracking...
+
+ERROR!! key not found
+
+Parallel Search  604310.2 ms
+
+Plaintext:     6A 6A 6A 
+
+cipher_text:   B C7 85 
+
+Key:           4B 65 79 
+
+PRGA Stream:   BD FD 5B 
+
+XOR:           D7 97 31 
+
+Cracking...
+
+ERROR!! key not found
+
+Parallel Search  604099.9 ms
+
+Plaintext:     6A 6A 6A 
+
+cipher_text:   B C7 85 
+
+Key:           4B 65 79 
+
+PRGA Stream:   BD FD 5B 
+
+XOR:           D7 97 31 
+
+Cracking...
+
+ERROR!! key not found
+
+Parallel Search  604244.1 ms
+
+Plaintext:     6A 6A 6A 
+
+cipher_text:   B C7 85 
+
+Key:           4B 65 79 
+
+PRGA Stream:   BD FD 5B 
+
+XOR:           D7 97 31 
+
+Cracking...
+ <> CORRECT
+
+Parallel Search  156007.4 ms
+
+Plaintext:     6A 6A 6A 
+
+cipher_text:   B C7 85 
+
+Key:           4B 65 79 
+
+PRGA Stream:   BD FD 5B 
+
+XOR:           D7 97 31 
+
+Cracking...
