@@ -18,7 +18,12 @@ CPU time   | CPU* time | Speedup  | Device             | Mode  |Author
 -----------| -------- | -------- | ------------------ | ----  |------
 23693 ms   | 6499 ms    | 3x     | Nvidia Jetson TX2  | OpenMP (-O0) | -
 
-## 02. QuickSort
+## 02. Producer Consumer
 
 <img src="https://github.com/PARCO-LAB/Advanced-Computer-Architectures/blob/main/figures/l6_02.jpg" width="500" height=auto> 
+
+Tested on a Raspberry Pi 3 A+ with a 1.4GHz quad-core CPU.
+
+1) Critical Regions: avg speedup = 1.6x
+2) Locks: avg speedup = 1.84x
 

@@ -92,7 +92,7 @@ int main() {
     for (k = 0; k < (1<<24); ++k) {
         if(!found) {
             #pragma omp critical
-            key_scheduling_alg(S, key, key_length);
+            { key_scheduling_alg(S, key, key_length); }
             pseudo_random_gen(S, stream, key_length);
 
             for (i = 0; i < key_length; ++i)

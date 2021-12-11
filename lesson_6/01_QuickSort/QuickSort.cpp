@@ -31,7 +31,7 @@ void quick_sort(int array[], const int start, const int end) {
 void quick_sort_par(int array[], const int start, const int end) {
     if(start < end) {
         int pivot = partition(array, start, end);
-        #pragma omp parallel sections
+        #pragma omp parallel sections 
         {
             #pragma omp section
             { 
@@ -74,7 +74,7 @@ int main() {
 
     TM.print("Sequential: ");
 
-    TM.start();
+    TM.start(); 
     quick_sort_par(input, 0, N - 1);
     TM.stop();
 
