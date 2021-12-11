@@ -14,9 +14,9 @@ CPU time   | CPU* time | Speedup  | Device             | Mode         | Author
 
 ### Performance reference table (N = 1 << 20):
 
-CPU time   | CPU* time | Speedup  | Device             | Mode  |Author
------------| -------- | -------- | ------------------ | ----  |------
-23693 ms   | 6499 ms    | 3x     | Nvidia Jetson TX2  | OpenMP (-O0) | -
+CPU time   | CPU* time | Speedup  | Device             | Mode         | Author
+-----------| --------- | -------- | ------------------ | -----------  |------
+12558 ms   | 12736 ms  | 0.98x	  | Intel i5-7400      | OpenMP (-O0) | Filippo Nevi
 
 ## 02. Producer Consumer
 
