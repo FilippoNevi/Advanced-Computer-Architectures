@@ -1,0 +1,1 @@
+/usr/bin/c++    -std=c++14 -fopenmp   CMakeFiles/find_omp.dir/Find.cpp.o  -o find_omp 

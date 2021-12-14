@@ -1,0 +1,3 @@
+/mnt/c/Users/Federico/Dropbox/CorsoAA/Esercizi/OpenMP/SoluzioniOMP2v2/Findv2/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Federico/Dropbox/CorsoAA/Esercizi/OpenMP/SoluzioniOMP2v2/Findv2/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/Federico/Dropbox/CorsoAA/Esercizi/OpenMP/SoluzioniOMP2v2/Findv2/build/CMakeFiles/find_omp.dir
